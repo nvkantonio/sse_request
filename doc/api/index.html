@@ -53,7 +53,7 @@
 <ul>
 <li>Add package to pubspec.yaml:</li>
 </ul>
-<pre class="language-yaml"><code class="language-yaml">client_sse:
+<pre class="language-yaml"><code class="language-yaml">sse_request:
     git:
       url: https://github.com/nvkantonio/sse_request
 </code></pre>
@@ -92,10 +92,10 @@ void main() async {
   await Future.delayed(Duration(seconds: 30));
   dev.log('END');
 
-  /// Dont forget to close StreamSubscription and SteamController
+  /// Dont forget to close StreamSubscription and StreamController
   subscription.cancel();
 
-  /// Closing [SteamController] ensures sending disconnect event to api server
+  /// Closing [StreamController] ensures sending disconnect event to api server
   streamController.close();
 }
 </code></pre>

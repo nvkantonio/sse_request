@@ -43,10 +43,10 @@ typedef SseResposeStreamController = StreamController<Map<String, dynamic>>;
 ///  await Future.delayed(Duration(seconds: 30));
 ///  dev.log('END');
 ///
-///  /// Dont forget to close StreamSubscription and SteamController
+///  /// Dont forget to close StreamSubscription and StreamController
 ///  subscription.cancel();
 ///
-///  /// Closing [SteamController] ensures sending disconnect event to api server
+///  /// Closing [StreamController] ensures sending disconnect event to api server
 ///  streamController.close();
 /// ```
 /// {@endtemplate}
@@ -85,12 +85,12 @@ class SseRequest extends Request {
     Map<String, dynamic>? body,
     Encoding? encoding,
   }) : this(
-         method: 'POST',
-         headers: headers,
-         uri: uri,
-         body: body,
-         encoding: encoding,
-       );
+          method: 'POST',
+          headers: headers,
+          uri: uri,
+          body: body,
+          encoding: encoding,
+        );
 
   /// Sends this request.
   ///

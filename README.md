@@ -10,7 +10,7 @@ Simple SSE (Server Sent Events) consumer.
 
 - Add package to pubspec.yaml:
 ```yaml
-client_sse:
+sse_request:
     git:
       url: https://github.com/nvkantonio/sse_request
 ```
@@ -52,10 +52,10 @@ void main() async {
   await Future.delayed(Duration(seconds: 30));
   dev.log('END');
 
-  /// Dont forget to close StreamSubscription and SteamController
+  /// Dont forget to close StreamSubscription and StreamController
   subscription.cancel();
 
-  /// Closing [SteamController] ensures sending disconnect event to api server
+  /// Closing [StreamController] ensures sending disconnect event to api server
   streamController.close();
 }
 ```

@@ -93,10 +93,10 @@
  await Future.delayed(Duration(seconds: 30));
  dev.log('END');
 
- /// Dont forget to close StreamSubscription and SteamController
+ /// Dont forget to close StreamSubscription and StreamController
  subscription.cancel();
 
- /// Closing [SteamController] ensures sending disconnect event to api server
+ /// Closing [StreamController] ensures sending disconnect event to api server
  streamController.close();
 </code></pre>
 </section>
@@ -111,12 +111,12 @@
   Map&lt;String, dynamic&gt;? body,
   Encoding? encoding,
 }) : this(
-       method: &#39;POST&#39;,
-       headers: headers,
-       uri: uri,
-       body: body,
-       encoding: encoding,
-     );</code></pre>
+        method: &#39;POST&#39;,
+        headers: headers,
+        uri: uri,
+        body: body,
+        encoding: encoding,
+      );</code></pre>
 </section>
 
 
