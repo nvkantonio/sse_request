@@ -20,7 +20,8 @@ sse_request:
 import 'package:sse_request/sse_request.dart';
 ```
 
-- Create `SseRequest()` object and call `.sendStreamed()`
+- Create `SseRequest()` object and call `.getStream()`
+- Add listener to Stream
 
 
 ## Usage
@@ -37,11 +38,12 @@ void main() async {
     body: {'hello': 'world'},
   );
 
-  /// Send request with named connection to obtain [StreamController]
-  final streamController = await request.sendStreamed('name:1');
+  /// Obtain [Stream] of events
+  /// Doesn't connect to api until first listener
+  final stream = request.getStream('name:1');
 
   /// Listen to SSE event stream parsed as regular json {event_name: event_data}
-  final subscription = streamController.stream.listen((event) {
+  final subscription = stream.listen((event) {
     try {
       dev.log(event.toString());
     } catch (e) {
@@ -52,11 +54,8 @@ void main() async {
   await Future.delayed(Duration(seconds: 30));
   dev.log('END');
 
-  /// Dont forget to close StreamSubscription and StreamController
+  /// Dont forget to close StreamSubscription
   subscription.cancel();
-
-  /// Closing [StreamController] ensures sending disconnect event to api server
-  streamController.close();
 }
 ```
 

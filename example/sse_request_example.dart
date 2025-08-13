@@ -13,11 +13,12 @@ Future<void> post() async {
     body: {'hello': 'world'},
   );
 
-  /// Send request with named connection to obtain [StreamController]
-  final streamController = await request.sendStreamed('name:1');
+  /// Obtain [Stream] of events
+  /// Doesn't connect to api until first listener
+  final stream = request.getStream('name:1');
 
   /// Listen to SSE event stream parsed as regular json {event_name: event_data}
-  final subscription = streamController.stream.listen((event) {
+  final subscription = stream.listen((event) {
     try {
       dev.log(event.toString());
     } catch (e) {
@@ -28,11 +29,8 @@ Future<void> post() async {
   await Future.delayed(Duration(seconds: 30));
   dev.log('END');
 
-  /// Dont forget to close StreamSubscription and StreamController
+  /// Dont forget to close StreamSubscription
   subscription.cancel();
-
-  /// Closing [StreamController] ensures sending disconnect event to api server
-  streamController.close();
 }
 
 Future<void> get() async {
@@ -41,9 +39,9 @@ Future<void> get() async {
     headers: {'hello': 'world'},
   );
 
-  final streamController = await request.sendStreamed('name:1');
+  final stream = request.getStream('name:1');
 
-  final subscription = streamController.stream.listen((event) {
+  final subscription = stream.listen((event) {
     try {
       dev.log(event.toString());
     } catch (e) {
@@ -54,5 +52,4 @@ Future<void> get() async {
   await Future.delayed(Duration(seconds: 30));
   dev.log('END');
   subscription.cancel();
-  streamController.close();
 }

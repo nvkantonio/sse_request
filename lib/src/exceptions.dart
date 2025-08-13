@@ -26,3 +26,12 @@ class SseParseException extends CustomFormatException {
     super.originalExeption,
   });
 }
+
+class SseConnectionExeption extends CustomFormatException {
+  const SseConnectionExeption({
+    super.message,
+    super.source,
+    super.offset,
+    super.originalExeption,
+  });
+}

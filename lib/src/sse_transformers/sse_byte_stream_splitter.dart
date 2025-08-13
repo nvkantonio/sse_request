@@ -2,7 +2,7 @@ import '../stream_event_transformer/byte_stream_splitter_sink.dart';
 
 /// Byte stream splitter for separating multiple SSE events in one steam event to multiple steam events each containing sigle SSE event
 ///
-/// For more info about SSE standart refer to documentation https://html.spec.whatwg.org/multipage/server-sent-events.html
+/// For more info about SSE protocol refer to documentation https://html.spec.whatwg.org/multipage/server-sent-events.html
 final class SseByteStreamSplitterSink extends ByteStreamSplitterSink {
   const SseByteStreamSplitterSink(super.outputSink);
 

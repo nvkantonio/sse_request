@@ -63,7 +63,8 @@
 <pre class="language-dart"><code class="language-dart">import 'package:sse_request/sse_request.dart';
 </code></pre>
 <ul>
-<li>Create <code>SseRequest()</code> object and call <code>.sendStreamed()</code></li>
+<li>Create <code>SseRequest()</code> object and call <code>.getStream()</code></li>
+<li>Add listener to Stream</li>
 </ul>
 <h2 id="usage">Usage</h2>
 <pre class="language-dart"><code class="language-dart">import 'dart:developer' as dev;
@@ -77,11 +78,12 @@ void main() async {
     body: {'hello': 'world'},
   );
 
-  /// Send request with named connection to obtain [StreamController]
-  final streamController = await request.sendStreamed('name:1');
+  /// Obtain [Stream] of events
+  /// Doesn't connect to api until first listener
+  final stream = request.getStream('name:1');
 
   /// Listen to SSE event stream parsed as regular json {event_name: event_data}
-  final subscription = streamController.stream.listen((event) {
+  final subscription = stream.listen((event) {
     try {
       dev.log(event.toString());
     } catch (e) {
@@ -92,11 +94,8 @@ void main() async {
   await Future.delayed(Duration(seconds: 30));
   dev.log('END');
 
-  /// Dont forget to close StreamSubscription and StreamController
+  /// Dont forget to close StreamSubscription
   subscription.cancel();
-
-  /// Closing [StreamController] ensures sending disconnect event to api server
-  streamController.close();
 }
 </code></pre>
 <h2 id="additional-info">Additional info</h2>
@@ -150,7 +149,7 @@ void main() async {
 <footer>
   <span class="no-break">
     sse_request
-      0.0.1
+      0.0.2
   </span>
   
 </footer>

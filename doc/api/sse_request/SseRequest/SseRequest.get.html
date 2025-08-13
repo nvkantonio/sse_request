@@ -63,25 +63,26 @@
 <section class="desc markdown">
   <p>Simply adds GET method and removes unnecessary body.</p>
 <p>An HTTP SSE request where the entire request body is known in advance.</p>
-<p>For precise control, prefer import and use <code>sse_trasformers.dart</code> instead.</p>
+<p>For precise control, prefer <code>sse_trasformers.dart</code> included library instead.</p>
 <p><a href="https://pub.dev/documentation/http/1.5.0/http/BaseRequest/method.html">method</a> is the request method of <code>SseRequestType</code>.
 <a href="https://pub.dev/documentation/http/1.5.0/http/BaseRequest/url.html">url</a> is the URL of the SSE endpoint.
 <code>header</code> is a map of request headers.
 <a href="https://pub.dev/documentation/http/1.5.0/http/Request/body.html">body</a> is an optional request body for POST requests.
 <code>encoding</code> is preferred encoding to decode SSE stream.</p>
 <p>example:</p>
-<pre class="language-dart"><code class="language-dart"> /// Create [SseRequest] using [SseRequest.get] or [SseRequest.post]
+<pre class="language-dart"><code class="language-dart">/// Create [SseRequest] using [SseRequest.get] or [SseRequest.post]
  final request = SseRequest.post(
    uri: Uri.parse('your_uri'),
    headers: {'hello': 'world'},
    body: {'hello': 'world'},
  );
 
- /// Send request with named connection to obtain [StreamController]
- final streamController = await request.sendStreamed('name:1');
+ /// Obtain [Stream] of events
+ /// Doesn't connect to api until first listener
+ final stream = request.getStream('name:1');
 
  /// Listen to SSE event stream parsed as regular json {event_name: event_data}
- final subscription = streamController.stream.listen((event) {
+ final subscription = stream.listen((event) {
    try {
      dev.log(event.toString());
    } catch (e) {
@@ -92,11 +93,8 @@
  await Future.delayed(Duration(seconds: 30));
  dev.log('END');
 
- /// Dont forget to close StreamSubscription and StreamController
+ /// Dont forget to close StreamSubscription
  subscription.cancel();
-
- /// Closing [StreamController] ensures sending disconnect event to api server
- streamController.close();
 </code></pre>
 </section>
 
@@ -136,7 +134,7 @@
 <footer>
   <span class="no-break">
     sse_request
-      0.0.1
+      0.0.2
   </span>
   
 </footer>

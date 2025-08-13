@@ -11,7 +11,7 @@ typedef SseResposeStreamController = StreamController<Map<String, dynamic>>;
 /// {@template sse_request}
 /// An HTTP SSE request where the entire request body is known in advance.
 ///
-/// For precise control, prefer import and use [sse_trasformers.dart] instead.
+/// For precise control, prefer [sse_trasformers.dart] included library instead.
 ///
 /// [method] is the request method of [SseRequestType].
 /// [url] is the URL of the SSE endpoint.
@@ -21,18 +21,19 @@ typedef SseResposeStreamController = StreamController<Map<String, dynamic>>;
 ///
 /// example:
 /// ```dart
-///  /// Create [SseRequest] using [SseRequest.get] or [SseRequest.post]
+////// Create [SseRequest] using [SseRequest.get] or [SseRequest.post]
 ///  final request = SseRequest.post(
 ///    uri: Uri.parse('your_uri'),
 ///    headers: {'hello': 'world'},
 ///    body: {'hello': 'world'},
 ///  );
 ///
-///  /// Send request with named connection to obtain [StreamController]
-///  final streamController = await request.sendStreamed('name:1');
+///  /// Obtain [Stream] of events
+///  /// Doesn't connect to api until first listener
+///  final stream = request.getStream('name:1');
 ///
 ///  /// Listen to SSE event stream parsed as regular json {event_name: event_data}
-///  final subscription = streamController.stream.listen((event) {
+///  final subscription = stream.listen((event) {
 ///    try {
 ///      dev.log(event.toString());
 ///    } catch (e) {
@@ -43,11 +44,8 @@ typedef SseResposeStreamController = StreamController<Map<String, dynamic>>;
 ///  await Future.delayed(Duration(seconds: 30));
 ///  dev.log('END');
 ///
-///  /// Dont forget to close StreamSubscription and StreamController
+///  /// Dont forget to close StreamSubscription
 ///  subscription.cancel();
-///
-///  /// Closing [StreamController] ensures sending disconnect event to api server
-///  streamController.close();
 /// ```
 /// {@endtemplate}
 class SseRequest extends Request {
@@ -94,15 +92,43 @@ class SseRequest extends Request {
 
   /// Sends this request.
   ///
-  /// Keep in mind this method doesn't automatically closes sse connection, although http [Client] will.
-  /// Close connection: `(await SseRequest.sendStreamed('test')).close()`.
+  /// Doesn't connect to api until first listener.
+  /// Close [StreamSubscribtion] on done to prevent memory leaks.
   ///
-  /// This automatically initializes a new [Client].
-  Future<SseResposeStreamController> sendStreamed(
+  /// This automatically initializes and closes [Client].
+  Stream<Map<String, dynamic>> getStream(
     String subName, [
     bool useBroadCast = false,
-  ]) async {
+  ]) {
     final client = Client();
+
+    final StreamController<Map<String, dynamic>> streamController =
+        useBroadCast ? StreamController.broadcast() : StreamController();
+
+    streamController
+      ..onListen = () async {
+        dev.log("Opened SSE subscription \"$subName\"");
+        try {
+          streamController.addStream(await _sendStreamed(client));
+        } catch (e) {
+          client.close();
+          streamController.addError(SseConnectionExeption(
+            message: 'Could not connect to SSE: $e',
+            originalExeption: e,
+          ));
+          streamController.close();
+        }
+      }
+      ..onCancel = () {
+        dev.log("Closed SSE subscription $subName");
+        client.close();
+        streamController.close();
+      };
+
+    return streamController.stream;
+  }
+
+  Future<Stream<Map<String, dynamic>>> _sendStreamed(Client client) async {
     try {
       final streamedResponse = await client.send(this);
       dev.log("Connected to sse");
@@ -112,20 +138,7 @@ class SseRequest extends Request {
           .transform(encoding.decoder)
           .transform(sseStreamParser);
 
-      final StreamController<Map<String, dynamic>> streamController =
-          useBroadCast ? StreamController.broadcast() : StreamController();
-
-      streamController
-        ..onListen = () {
-          dev.log("Opened sse subscription \"$subName\"");
-        }
-        ..onCancel = () {
-          client.close();
-          dev.log("Closed sse subscription $subName");
-        }
-        ..addStream(transformedResponseStream);
-
-      return streamController;
+      return transformedResponseStream;
 
       // TODO(nvkantonio) rework exceptions
     } on ClientException {

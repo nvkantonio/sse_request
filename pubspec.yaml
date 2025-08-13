@@ -1,6 +1,6 @@
 name: sse_request
 description: A dart package for consuming SSE (Server Send Events)
-version: 0.0.1
+version: 0.0.2
 repository: https://github.com/nvkantonio/sse_request
 
 environment:
