@@ -11,12 +11,10 @@ void main() async {
     final stream = request.getStream('Name:1');
 
     final subscription = stream.listen((event) {
-      try {
-        dev.log(event.toString());
-      } catch (e) {
-        dev.log('Invalid sse message: $e');
-        dev.inspect(event);
-      }
+      dev.log(event.toString());
+    }, onError: (e) {
+      dev.log('Invalid sse message: $e');
+      dev.inspect(e);
     });
 
     expect(stream, neverEmits(throwsA(anything)));

@@ -3,7 +3,7 @@ import 'dart:convert';
 import '../stream_event_transformer/event_sink_transformer.dart';
 import '../exceptions.dart';
 
-/// SSE reponse event lines stream parser to [Map<String, *json* dynamic>] object
+/// Raw SSE response event parser to [Map<String, *json* dynamic>]
 ///
 /// For more info about SSE protocol refer to documentation https://html.spec.whatwg.org/multipage/server-sent-events.html
 final class SseStreamParserSink

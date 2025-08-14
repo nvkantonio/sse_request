@@ -34,11 +34,9 @@ typedef SseResposeStreamController = StreamController<Map<String, dynamic>>;
 ///
 ///  /// Listen to SSE event stream parsed as regular json {event_name: event_data}
 ///  final subscription = stream.listen((event) {
-///    try {
-///      dev.log(event.toString());
-///    } catch (e) {
-///      dev.log('Invalid sse message: $e');
-///    }
+///    dev.log(event.toString());
+///  }, onError: (e) {
+///    dev.log('Invalid sse message: $e');
 ///  });
 ///
 ///  await Future.delayed(Duration(seconds: 30));
