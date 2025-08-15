@@ -1,13 +1,16 @@
-import '../stream_event_transformer/byte_stream_splitter_sink.dart';
+import 'dart:developer' as dev;
+
+import '../stream_event_transformer/event_sink_transformer.dart';
+import '../exceptions.dart';
 
 ///  SSE event byte stream splitter. Separates each event from multiple events
 ///
 /// For more info about SSE protocol refer to documentation https://html.spec.whatwg.org/multipage/server-sent-events.html
-final class SseByteStreamSplitterSink extends ByteStreamSplitterSink {
+final class SseByteStreamSplitterSink
+    extends EventSinkTransformer<List<int>, Iterable<int>> {
   const SseByteStreamSplitterSink(super.outputSink);
 
   // TODO(nvkantonio): Would it work with "\n"? Maybe its better to decode first for debugging invalid sse purposes
-  @override
   Iterable<List<int>> filterBetweenSeparator(final List<int> event) sync* {
     int start = 0;
 
@@ -20,6 +23,24 @@ final class SseByteStreamSplitterSink extends ByteStreamSplitterSink {
 
     if (start < event.length - 1) {
       yield event.sublist(start, event.length - 1);
+    }
+  }
+
+  @override
+  void add(List<int> event) {
+    try {
+      for (final splittedEvent in filterBetweenSeparator(event)) {
+        addToSink(splittedEvent);
+      }
+    } catch (e) {
+      final exeption = ByteStreamSplitException(
+        message: "Failed to split sse",
+        source: event,
+        originalExeption: e,
+      );
+      addError(exeption);
+      dev.log(exeption.toString());
+      dev.inspect(event);
     }
   }
 }
