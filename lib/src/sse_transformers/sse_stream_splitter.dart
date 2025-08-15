@@ -3,30 +3,29 @@ import 'dart:developer' as dev;
 import '../stream_event_transformer/event_sink_transformer.dart';
 import '../exceptions.dart';
 
-///  SSE event byte stream splitter. Separates each event from multiple events
+///  SSE event stream splitter. Separates each event from multiple events
 ///
 /// For more info about SSE protocol refer to documentation https://html.spec.whatwg.org/multipage/server-sent-events.html
-final class SseByteStreamSplitterSink
-    extends EventSinkTransformer<List<int>, Iterable<int>> {
-  const SseByteStreamSplitterSink(super.outputSink);
+final class SseStreamSplitterSink extends EventSinkTransformer<String, String> {
+  const SseStreamSplitterSink(super.outputSink);
 
-  Iterable<List<int>> filterBetweenSeparator(final List<int> event) sync* {
+  Iterable<String> filterBetweenSeparator(final String event) sync* {
     int start = 0;
 
     for (int i = 0; i < event.length - 1; i++) {
-      if (event[i] == 10 && event[i + 1] == 10) {
-        yield event.sublist(start, i);
+      if (event[i] == '\n' && event[i + 1] == '\n') {
+        yield event.substring(start, i);
         start = i + 2;
       }
     }
 
     if (start < event.length - 1) {
-      yield event.sublist(start, event.length - 1);
+      yield event.substring(start, event.length - 1);
     }
   }
 
   @override
-  void add(List<int> event) {
+  void add(String event) {
     try {
       for (final splittedEvent in filterBetweenSeparator(event)) {
         addToSink(splittedEvent);
@@ -34,12 +33,11 @@ final class SseByteStreamSplitterSink
     } catch (e) {
       final exeption = ByteStreamSplitException(
         message: "Failed to split sse",
-        source: event,
+        source: (event),
         originalExeption: e,
       );
       addError(exeption);
       dev.log(exeption.toString());
-      dev.inspect(event);
     }
   }
 }

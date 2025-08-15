@@ -132,8 +132,8 @@ class SseRequest extends Request {
       dev.log("Connected to sse");
 
       final transformedResponseStream = streamedResponse.stream
-          .transform(sseStreamSplitter)
           .transform(encoding.decoder)
+          .transform(sseStreamSplitter)
           .transform(sseStreamParser);
 
       return transformedResponseStream;
