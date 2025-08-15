@@ -6,8 +6,6 @@ import 'package:http/http.dart';
 
 import '../sse_transformers.dart';
 
-typedef SseResposeStreamController = StreamController<Map<String, dynamic>>;
-
 /// {@template sse_request}
 /// An HTTP SSE request where the entire request body is known in advance.
 ///

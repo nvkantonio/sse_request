@@ -1,10 +1,11 @@
 # SSE_REQUEST
 
 Simple SSE (Server Sent Events) consumer.
+Build around [dart:http](https://pub.dev/packages/http) [Request](https://pub.dev/documentation/http/latest/http/Request-class.html)
 
 ## Features
 
-- Consumes Server Sent Events from api, transforms it to simple `Map<String, dynamic>` for each event
+- Consumes SSE, transforms it to simple `Map<String, dynamic>` for each event
 
 ## Getting started
 
@@ -62,3 +63,6 @@ void main() async {
 This package doesn't work for web.
 
 This package doesn't support bidirectional protocol implementation. In that case prefer using [official sse package](https://pub.dev/packages/sse) instead.
+
+Known issues:
+- Too much events in single stream response could be cut off (probably length limiter in dart:http package)
