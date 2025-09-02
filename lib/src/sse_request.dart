@@ -44,7 +44,7 @@ import '../sse_transformers.dart';
 ///  subscription.cancel();
 /// ```
 /// {@endtemplate}
-class SseRequest extends Request {
+final class SseRequest extends Request {
   /// {@macro sse_request}
   SseRequest({
     required String method,
@@ -53,9 +53,13 @@ class SseRequest extends Request {
     Map<String, dynamic>? body,
     Encoding? encoding,
   }) : super(method, uri) {
-    headers?.forEach((key, value) {
-      super.headers[key] = value;
+    super.headers.addAll({
+      'Cache-Control': 'no-cache',
+      'Accept': 'text/event-stream',
+      if (headers != null)
+        for (final e in headers.entries) e.key: e.value
     });
+
     super.encoding = encoding ?? utf8;
 
     if (body != null) super.body = jsonEncode(body);
