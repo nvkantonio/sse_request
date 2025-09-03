@@ -33,7 +33,7 @@ final class SseByteStreamSplitterSink
       }
     } catch (e) {
       final exeption = ByteStreamSplitException(
-        message: "Failed to split sse",
+        message: "Failed to split SSE",
         source: event,
         originalExeption: e,
       );

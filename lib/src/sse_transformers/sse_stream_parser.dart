@@ -33,7 +33,7 @@ final class SseStreamParserSink
       splittedEvent = event.split('\n');
     } catch (e) {
       throw SseParseException(
-        message: 'Failed to split sse in lines',
+        message: 'Failed to split SSE into lines',
         source: event,
         originalExeption: e,
       );
@@ -79,7 +79,7 @@ final class SseStreamParserSink
       rethrow;
     } catch (e) {
       throw SseParseException(
-        message: 'Failed to parse sse line: $line',
+        message: 'Failed to parse SSE line: $line',
         originalExeption: e,
       );
     }

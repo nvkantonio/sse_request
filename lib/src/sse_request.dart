@@ -4,6 +4,7 @@ import 'dart:developer' as dev;
 
 import 'package:http/http.dart';
 
+import '../sse_source_controllers.dart';
 import '../sse_transformers.dart';
 
 /// {@template sse_request}
@@ -93,45 +94,36 @@ final class SseRequest extends Request {
   /// Sends this request.
   ///
   /// Doesn't connect to api until first listener.
-  /// Close [StreamSubscribtion] on done to prevent memory leaks.
+  /// Close [StreamSubscription] on done to prevent memory leaks.
   ///
   /// This automatically initializes and closes [Client].
   Stream<Map<String, dynamic>> getStream(
     String subName, [
     bool useBroadCast = false,
   ]) {
-    final client = Client();
-
-    final StreamController<Map<String, dynamic>> streamController =
-        useBroadCast ? StreamController.broadcast() : StreamController();
-
-    streamController
-      ..onListen = () async {
-        dev.log("Opened SSE subscription \"$subName\"");
-        try {
-          streamController.addStream(await _sendStreamed(client));
-        } catch (e) {
-          client.close();
-          streamController.addError(SseConnectionExeption(
-            message: 'Could not connect to SSE: $e',
-            originalExeption: e,
-          ));
-          streamController.close();
+    final controller = SseSourceController(
+      isBroadCast: useBroadCast,
+      name: subName,
+      sseStreamBuilder: sendStreamed,
+      onNewConnection: (name) =>
+          dev.log('Creating new SSE connection to "$name"'),
+      onConnected: (name) => dev.log('Established SSE connection to "$name"'),
+      onCloseConnection: (name, wasConnected) {
+        if (wasConnected) {
+          dev.log('Closed SSE subscription $name');
+        } else {
+          dev.log('Closed SSE subscription $name without being opened');
         }
-      }
-      ..onCancel = () {
-        dev.log("Closed SSE subscription $subName");
-        client.close();
-        streamController.close();
-      };
+      },
+    );
 
-    return streamController.stream;
+    return controller.stream;
   }
 
-  Future<Stream<Map<String, dynamic>>> _sendStreamed(Client client) async {
+  Future<Stream<Map<String, dynamic>>> sendStreamed(Client? client) async {
     try {
-      final streamedResponse = await client.send(this);
-      dev.log("Connected to sse");
+      final streamedResponse =
+          await (client != null ? client.send(this) : send());
 
       final transformedResponseStream = streamedResponse.stream
           .transform(encoding.decoder)
@@ -139,15 +131,6 @@ final class SseRequest extends Request {
           .transform(sseStreamParser);
 
       return transformedResponseStream;
-
-      // TODO(nvkantonio) rework exceptions
-    } on ClientException {
-      client.close();
-      rethrow;
-    } on ByteStreamSplitException {
-      rethrow;
-    } on SseParseException {
-      rethrow;
     } catch (e) {
       rethrow;
     }

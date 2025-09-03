@@ -19,7 +19,7 @@ void main() async {
     final subscription = stream.listen((event) {
       dev.log(event.toString());
     }, onError: (e) {
-      dev.log('Invalid sse event: $e');
+      dev.log(e.toString());
       errors.add(e);
     });
 

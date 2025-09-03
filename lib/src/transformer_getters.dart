@@ -1,5 +1,4 @@
 import 'sse_transformers/sse_stream_splitter.dart';
-import 'stream_event_transformer/stream_event_transformer.dart';
 import '../sse_transformers.dart';
 
 typedef SseByteStreamSplitter

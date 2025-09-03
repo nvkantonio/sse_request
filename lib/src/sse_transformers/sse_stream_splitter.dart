@@ -32,7 +32,7 @@ final class SseStreamSplitterSink extends EventSinkTransformer<String, String> {
       }
     } catch (e) {
       final exeption = ByteStreamSplitException(
-        message: "Failed to split sse",
+        message: "Failed to split SSE",
         source: (event),
         originalExeption: e,
       );
