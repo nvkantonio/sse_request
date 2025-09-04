@@ -3,12 +3,13 @@ import 'dart:developer' as dev;
 import '../stream_event_transformer/event_sink_transformer.dart';
 import '../exceptions.dart';
 
-///  SSE event stream splitter. Separates each event from multiple events
+/// SSE event stream splitter. Separates each event from multiple events.
 ///
-/// For more info about SSE protocol refer to documentation https://html.spec.whatwg.org/multipage/server-sent-events.html
+/// For more information about the SSE protocol, refer to the documentation: https://html.spec.whatwg.org/multipage/server-sent-events.html
 final class SseStreamSplitterSink extends EventSinkTransformer<String, String> {
   const SseStreamSplitterSink(super.outputSink);
 
+  /// Splits the input event string into separate SSE events.
   Iterable<String> filterBetweenSeparator(final String event) sync* {
     int start = 0;
 
@@ -24,6 +25,7 @@ final class SseStreamSplitterSink extends EventSinkTransformer<String, String> {
     }
   }
 
+  /// Adds a split SSE event to the output sink.
   @override
   void add(String event) {
     try {

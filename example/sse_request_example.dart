@@ -1,53 +1,42 @@
+// Example usage of SseRequest.
+// Demonstrates how to use SseRequest for both POST and GET requests.
+
+// ignore_for_file: unused_local_variable
+
 import 'dart:developer' as dev;
 import 'package:sse_request/sse_request.dart';
 
 void main() async {
-  await post();
-}
+  /// Create an [SseRequest] for a GET request.
+  final getRequest = SseRequest.get(
+    uri: Uri.parse('your_uri'),
+    headers: {'hello': 'world'},
+  );
 
-Future<void> post() async {
-  /// Create [SseRequest] using [SseRequest.get] or [SseRequest.post]
-  final request = SseRequest.post(
+  /// Create an [SseRequest] for a POST request.
+  final postRequest = SseRequest.post(
     uri: Uri.parse('your_uri'),
     headers: {'hello': 'world'},
     body: {'hello': 'world'},
   );
 
-  /// Obtain [Stream] of events
-  /// Doesn't connect to api until first listener
-  final stream = request.getStream('name:1');
+  /// Obtains a [Stream] of events.
+  /// Does not connect to the API until the first listener is attached.
+  final stream = getRequest.getStream('name:1');
 
-  /// Listen to SSE event stream parsed as regular json {event_name: event_data}
-  final subscription = stream.listen((event) {
-    dev.log(event.toString());
-  }, onError: (e) {
-    dev.log('Invalid sse message: $e');
-  });
-
-  await Future.delayed(Duration(seconds: 30));
-  dev.log('END');
-
-  /// Dont forget to close StreamSubscription
-  subscription.cancel();
-}
-
-Future<void> get() async {
-  final request = SseRequest.get(
-    uri: Uri.parse('your_uri'),
-    headers: {'hello': 'world'},
+  /// Listens to the SSE event stream parsed as regular JSON {event_name: event_data}.
+  final subscription = stream.listen(
+    (event) {
+      dev.log(event.toString());
+    },
+    onError: (e) {
+      dev.log('Invalid SSE message: $e');
+    },
   );
 
-  final stream = request.getStream('name:1');
-
-  final subscription = stream.listen((event) {
-    try {
-      dev.log(event.toString());
-    } catch (e) {
-      dev.log('Invalid sse message: $e');
-    }
-  });
-
-  await Future.delayed(Duration(seconds: 30));
+  await Future.delayed(Duration(seconds: 10));
   dev.log('END');
+
+  /// Don't forget to close the StreamSubscription to avoid memory leaks.
   subscription.cancel();
 }

@@ -6,13 +6,43 @@ import 'package:meta/meta.dart';
 import 'sse_source_controller_base.dart';
 
 typedef EventErrorAction = FutureOr<void> Function(
-  Object error,
   SseSourceController controller,
   Object error,
   StackTrace stackTrace,
 );
 
+/// Simple implementation of [SseSourceControllerBase] where the `onErrorEvent` action can be specified in parameter, allowing the implementation of reconnection logic.
 final class SseSourceController extends SseSourceControllerBase {
+  /// Creates an [SseSourceController] with the given parameters.
+  ///
+  /// Simple implementation of [SseSourceControllerBase] where the [actionOnErrorEvent] action can be specified, allowing the implementation of reconnection logic.
+  ///
+  /// [actionOnErrorEvent] takes `Function(SseSourceController controller, Object error, StackTrace stackTrace)`.
+  ///
+  /// {@macro sse_source_controller_base}
+  ///
+  /// [doDisposeOnClientException] if `true`, disposes the controller when a ClientException is thrown, otherwise, calls `clear()`. Works only if the [actionOnErrorEvent] parameter is not specified.
+  ///
+  /// Example usage of [actionOnErrorEvent]:
+  /// ```dart
+  /// actionOnErrorEvent: (controller, error, st) async {
+  ///   /// With the callback of `SseSourceController controller`, you can handle how the controller reacts to certain errors.
+  ///   try {
+  ///     print(error.toString());
+  ///
+  ///     // Cancel current event listener and close http client
+  ///     await controller.clear();
+  ///
+  ///     // Connect new event listener
+  ///     await controller.connectEventListener(sseStreamBuilder);
+  ///   } catch (e) {
+  ///     // On unsuccessful connection retry, you can dispose the controller or retry again after a delay.
+  ///     await controller.dispose();
+  ///     rethrow;
+  ///   }
+  /// },
+  /// ```
+
   SseSourceController({
     required super.name,
     required super.sseStreamBuilder,

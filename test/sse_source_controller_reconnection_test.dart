@@ -43,6 +43,7 @@ void main() async {
           await controller.clear();
           await controller.connectEventListener(sseStreamBuilder);
         } catch (e) {
+          await controller.dispose();
           rethrow;
         }
       },

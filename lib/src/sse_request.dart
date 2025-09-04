@@ -7,46 +7,58 @@ import 'package:http/http.dart';
 import '../sse_source_controllers.dart';
 import '../sse_transformers.dart';
 
-/// {@template sse_request}
-/// An HTTP SSE request where the entire request body is known in advance.
+/// Represents an HTTP SSE request with a known request body.
 ///
-/// For precise control, prefer [sse_trasformers.dart] included library instead.
-///
-/// [method] is the request method of [SseRequestType].
-/// [url] is the URL of the SSE endpoint.
-/// [header] is a map of request headers.
-/// [body] is an optional request body for POST requests.
-/// [encoding] is preferred encoding to decode SSE stream.
-///
-/// example:
-/// ```dart
-////// Create [SseRequest] using [SseRequest.get] or [SseRequest.post]
-///  final request = SseRequest.post(
-///    uri: Uri.parse('your_uri'),
-///    headers: {'hello': 'world'},
-///    body: {'hello': 'world'},
-///  );
-///
-///  /// Obtain [Stream] of events
-///  /// Doesn't connect to api until first listener
-///  final stream = request.getStream('name:1');
-///
-///  /// Listen to SSE event stream parsed as regular json {event_name: event_data}
-///  final subscription = stream.listen((event) {
-///    dev.log(event.toString());
-///  }, onError: (e) {
-///    dev.log('Invalid sse message: $e');
-///  });
-///
-///  await Future.delayed(Duration(seconds: 30));
-///  dev.log('END');
-///
-///  /// Dont forget to close StreamSubscription
-///  subscription.cancel();
-/// ```
-/// {@endtemplate}
+/// For precise control, prefer usage of the [sse_transformers.dart] library instead.
 final class SseRequest extends Request {
-  /// {@macro sse_request}
+  /// Creates an SSE request with the specified method, URI, headers, body, and encoding.
+  /// {@template sse_request}
+  ///
+  /// [method] is the request method of [SseRequestType].
+  ///
+  /// [uri] is the URL of the SSE endpoint.
+  ///
+  /// [headers] is a map of request headers.
+  ///
+  /// [body] is an optional request body for POST requests.
+  ///
+  /// [encoding] is the preferred encoding to decode the SSE stream.
+  ///
+  /// Adds next default headers:
+  /// ```json
+  /// {"Cache-Control" = "no-cache", "Accept" = "text/event-stream"}
+  /// ```
+  ///
+  /// Example:
+  /// ```dart
+  ////// Creates an [SseRequest] for a POST request.
+  ///final request = SseRequest.post(
+  ///  uri: Uri.parse('your_uri'),
+  ///  headers: {'hello': 'world'},
+  ///  body: {'hello': 'world'},
+  ///);
+  ///
+  ////// Obtains a [Stream] of events.
+  ////// Does not connect to the API until the first listener is attached.
+  ///final stream = request.getStream('name:1');
+  ///
+  ////// Listens to the SSE event stream parsed as regular JSON {event_name: event_data}.
+  ///final subscription = stream.listen(
+  ///  (event) {
+  ///    dev.log(event.toString());
+  ///  },
+  ///  onError: (e) {
+  ///    dev.log('Invalid SSE message: $e');
+  ///  },
+  ///);
+  ///
+  ///await Future.delayed(Duration(seconds: 10));
+  ///dev.log('END');
+  ///
+  ////// Don't forget to close the StreamSubscription to avoid memory leaks.
+  ///subscription.cancel();
+  /// ```
+  /// {@endtemplate}
   SseRequest({
     required String method,
     required Uri uri,
@@ -66,7 +78,7 @@ final class SseRequest extends Request {
     if (body != null) super.body = jsonEncode(body);
   }
 
-  /// Simply adds GET method and removes unnecessary body.
+  /// Creates an SSE GET request.
   ///
   /// {@macro sse_request}
   SseRequest.get({
@@ -75,7 +87,7 @@ final class SseRequest extends Request {
     Encoding? encoding,
   }) : this(method: 'GET', headers: headers, uri: uri, encoding: encoding);
 
-  /// Simply adds POST method.
+  /// Creates an SSE POST request.
   ///
   /// {@macro sse_request}
   SseRequest.post({
@@ -91,12 +103,12 @@ final class SseRequest extends Request {
           encoding: encoding,
         );
 
-  /// Sends this request.
+  /// Returns a stream of SSE events as parsed JSON maps.
   ///
-  /// Doesn't connect to api until first listener.
-  /// Close [StreamSubscription] on done to prevent memory leaks.
+  /// If you need precise control over the event stream, prefer using the [SseSourceController] or implementing [SseSourceControllerBase].
   ///
-  /// This automatically initializes and closes [Client].
+  /// [subName] is the subscription name.
+  /// [useBroadCast] determines if the stream is broadcast.
   Stream<Map<String, dynamic>> getStream(
     String subName, [
     bool useBroadCast = false,
@@ -120,6 +132,9 @@ final class SseRequest extends Request {
     return controller.stream;
   }
 
+  /// Sends the SSE request and and transforms ByteStream to Json map for every event.
+  ///
+  /// [client] is an optional HTTP client to use for the request.
   Future<Stream<Map<String, dynamic>>> sendStreamed(Client? client) async {
     try {
       final streamedResponse =

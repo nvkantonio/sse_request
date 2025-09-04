@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:meta/meta.dart';
 
+/// Isolation wrapper for StreamController with dispose
 abstract class StreamSourceController<T> {
   const StreamSourceController(this.eventStreamController);
 
@@ -14,6 +15,7 @@ abstract class StreamSourceController<T> {
 
   bool get isClosed => eventStreamController.isClosed;
 
+  /// Internal event stream controller
   @protected
   final StreamController<T> eventStreamController;
 
