@@ -15,7 +15,7 @@ Built around [dart:http](https://pub.dev/packages/http) [Request](https://pub.de
 - Add package to pubspec.yaml:
 ```yaml
 dependencies:
-  sse_request: ^0.1.0
+  sse_request: ^0.1.1
 ```
 
 - Import package:
@@ -189,9 +189,9 @@ Future<void> main() async {
 
 ##### Parse each event
 
+Use [SseParsedSourceController<T>] instead of [SseSourceController] to set a custom type for the stream.
+
 ```dart
-/// Use [SseParsedSourceController<T>] instead of
-/// [SseSourceController] to set a custom type for the stream.
 SseParsedSourceController<String>(
   name: 'Name:1',
   sseStreamBuilder: request.sendStreamed,
