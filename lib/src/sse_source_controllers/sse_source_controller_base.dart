@@ -12,8 +12,7 @@ typedef ConnectionStreamBuilder = FutureOr<Stream<Map<String, dynamic>>>
 /// Base class for SSE source controllers. Manages connection lifecycle
 /// and event handling. Sets up the event stream controller with
 /// custom `onListen` and `onCancel`.
-abstract class SseSourceControllerBase
-    extends StreamSourceController<Map<String, dynamic>> {
+abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
   /// Manages connection lifecycle and event handling. Sets up the event stream
   /// controller with custom `onListen` and `onCancel`.
   ///

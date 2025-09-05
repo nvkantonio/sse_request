@@ -14,7 +14,8 @@ typedef EventErrorAction = FutureOr<void> Function(
 /// Simple implementation of [SseSourceControllerBase] where the `onErrorEvent`
 /// action can be specified in parameter, allowing the implementation of
 /// reconnection logic.
-final class SseSourceController extends SseSourceControllerBase {
+final class SseSourceController
+    extends SseSourceControllerBase<Map<String, dynamic>> {
   /// Creates an [SseSourceController] with the given parameters.
   ///
   /// Simple implementation of [SseSourceControllerBase] where the [actionOnErrorEvent] action can be specified, allowing the implementation
