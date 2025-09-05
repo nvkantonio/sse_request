@@ -54,13 +54,14 @@ final class SseSourceController
   /// );
   ///
   /// final controller = SseSourceController(
-  ///   // The name used to distinguish connection events for multiple streams.
+  ///   // This name used to distinguish connection events for multiple streams.
   ///   name: 'Name:1',
   ///   // Specify the builder function for obtaining the event stream.
   ///   sseStreamBuilder: request.sendStreamed,
   /// );
   ///
   /// // Establish an SSE connection.
+  /// //
   /// // Nothing is sent until this happens.
   /// final subscription = controller.stream.listen((event) {});
   ///

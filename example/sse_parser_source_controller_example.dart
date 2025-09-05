@@ -15,7 +15,7 @@ Future<void> main() async {
   /// Use [SseParsedSourceController<T>] instead of
   /// [SseSourceController] to set a custom type for the stream.
   final controller = SseParsedSourceController<String>(
-    // The name used to distinguish connection events for multiple streams.
+    // This name used to distinguish connection events for multiple streams.
     name: 'Name:1',
     // Specify the builder function for obtaining the event stream.
     sseStreamBuilder: request.sendStreamed,

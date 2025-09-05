@@ -13,7 +13,7 @@ Future<void> main() async {
   );
 
   final controller = SseSourceController(
-    // The name used to distinguish connection events for multiple streams.
+    // This name used to distinguish connection events for multiple streams.
     name: 'Name:1',
     // Specify the builder function for obtaining the event stream.
     sseStreamBuilder: request.sendStreamed,

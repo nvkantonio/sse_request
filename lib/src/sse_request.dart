@@ -40,6 +40,10 @@ final class SseRequest extends Request {
   /// );
   ///
   /// /// Obtains a [Stream] of events.
+  /// ///
+  /// /// First parameter is the subscription name, which is used
+  /// /// to distinguish connection events for multiple streams.
+  /// ///
   /// /// Nothing is send until the first listener is attached.
   /// final stream = request.getStream('name:1');
   ///
@@ -56,7 +60,8 @@ final class SseRequest extends Request {
   /// // Demonstration delay.
   /// await Future.delayed(Duration(seconds: 10));
   ///
-  /// /// Don't forget to close the StreamSubscription to avoid memory leaks.
+  /// /// Don't forget to close the [StreamSubscription]
+  /// to avoid memory leaks.
   /// subscription.cancel();
   /// ```
   /// {@endtemplate}
@@ -110,7 +115,8 @@ final class SseRequest extends Request {
   /// If you need precise control over the event stream, prefer using
   /// [SseSourceController] or implementing [SseSourceControllerBase].
   ///
-  /// [subName] is the subscription name.
+  /// [subName] is the subscription name. This name is used to
+  /// distinguish connection events for multiple streams.
   /// [useBroadCast] determines if the stream is broadcast.
   ///
   Stream<Map<String, dynamic>> getStream(

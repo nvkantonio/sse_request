@@ -24,7 +24,7 @@ import 'package:sse_request/sse_request.dart';
 ```
 
 - Create an `SseRequest()` object and call `.getStream()`.
-- Add a listener to the Stream.
+- Add a listener to the `Stream`.
 
 ## Usage
 
@@ -46,7 +46,12 @@ void main() async {
     body: {'hello': 'world'},
   );
 
+
   /// Obtains a [Stream] of events.
+  ///
+  /// First parameter is the subscription name, which is used
+  /// to distinguish connection events for multiple streams.
+  ///
   /// Nothing is send until the first listener is attached.
   final stream = getRequest.getStream('name:1');
 
@@ -63,12 +68,13 @@ void main() async {
   // Demonstration delay.
   await Future.delayed(Duration(seconds: 10));
 
-  /// Don't forget to close the StreamSubscription to avoid memory leaks.
+  /// Don't forget to close the [StreamSubscription] to
+  /// avoid memory leaks.
   subscription.cancel();
 }
 ```
 
-***For advanced functionality prefer using `SseSourceController` or `SseParsedSourceController<T>` or implementing `SseSourceControllerBase`.***
+***For advanced functionality prefer using `SseSourceController` or `SseParsedSourceController<T>`, or even implement `SseSourceControllerBase`.***
 
 ---
 
@@ -88,7 +94,7 @@ Future<void> main() async {
   );
 
   final controller = SseSourceController(
-    // The name used to distinguish connection events for multiple streams.
+    // This name used to distinguish connection events for multiple streams.
     name: 'Name:1',
     // Specify the builder function for obtaining the event stream.
     sseStreamBuilder: request.sendStreamed,
@@ -125,19 +131,20 @@ Future<void> main() async {
   // Demonstration delay.
   await Future.delayed(Duration(seconds: 10));
 
-  /// Don't forget to close the StreamSubscription to avoid memory leaks.
+  /// Don't forget to close the StreamSubscription
+  /// to avoid memory leaks.
   subscription.cancel();
 
-  // `dispose()` or `clear()` methods can be used to force close connection
-  // using controller, where `dispose()` ensures you cannot use
-  // the controller again.
+  // `dispose()` or `clear()` methods can be used to force close
+  // connection  using controller, where `dispose()` ensures
+  // you cannot use the controller again.
   controller.dispose();
 }
 ```
 
-##### Add reconnection
+#### Add reconnection
 
-`SseSourceController`'s stream is separate from the SSE stream, so if connection to the server is lost, a new SSE stream can be attached using `connectEventListener()`.
+`SseSourceController`'s stream is separate from the SSE stream, so if connection to the server is lost, a new SSE stream can be attached using `connectEventListener()`. This can be handled by `actionOnErrorEvent`;
 
 ```dart
 import 'dart:async';
@@ -178,18 +185,12 @@ Future<void> main() async {
       }
     },
   );
-
-  final subscription = controller.stream.listen((event) {
-    dev.log(event.toString());
-  }, onError: (e) {
-    dev.log('Got exception event $e');
-  });
 }
 ```
 
-##### Parse each event
+#### Parse each event
 
-Use [SseParsedSourceController<T>] instead of [SseSourceController] to set a custom type for the stream.
+Use `SseParsedSourceController<T>` instead of `SseSourceController` to set a custom type for the stream and define `eventParser`;
 
 ```dart
 SseParsedSourceController<String>(
@@ -210,7 +211,7 @@ SseParsedSourceController<String>(
 );
 ```
 
-#### Some theory
+#### Some explanation
 
 The package consists of two parts:
 - Data stream converters.
@@ -218,7 +219,7 @@ The package consists of two parts:
 
 To connect to a data stream, package use `BaseRequest`'s `send()` from the `dart:http` library, which returns a `StreamedResponse`. Instead of waiting for the entire response, you can access `streamedResponse.stream` to receive data as it arrives. This stream provides raw bytes (`ByteData`), which should be decoded and parsed into usable events.
 
-Example of creating a custom StreamedResponse converter:
+Example of creating a custom `StreamedResponse` converter:
 
 ```dart
 import 'package:http/http.dart' as http;
@@ -242,9 +243,7 @@ Future<Stream> getStream(http.BaseRequest request) async {
 
 ## Additional info
 
-This package does not work for web.
-
-This package does not support bidirectional protocol implementation. In that case, consider using the [official sse package](https://pub.dev/packages/sse) instead.
+- This package does not support bidirectional protocol implementation. In that case, consider using the [official sse package](https://pub.dev/packages/sse) instead.
 
 Known issues:
-- Too many events in a single stream response could be cut off (probably a length limiter in the dart:http package)
+- Too many data in a single stream response or a short amount of time could be cut off

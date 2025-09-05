@@ -21,6 +21,10 @@ void main() async {
   );
 
   /// Obtains a [Stream] of events.
+  ///
+  /// First parameter is the subscription name, which is used
+  /// to distinguish connection events for multiple streams.
+  ///
   /// Nothing is send until the first listener is attached.
   final stream = getRequest.getStream('name:1');
 
@@ -38,6 +42,7 @@ void main() async {
   await Future.delayed(Duration(seconds: 10));
   dev.log('END');
 
-  /// Don't forget to close the StreamSubscription to avoid memory leaks.
+  /// Don't forget to close the [StreamSubscription] to
+  /// avoid memory leaks.
   subscription.cancel();
 }
