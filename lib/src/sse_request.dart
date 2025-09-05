@@ -42,7 +42,7 @@ final class SseRequest extends Request {
   ////// Does not connect to the API until the first listener is attached.
   ///final stream = request.getStream('name:1');
   ///
-  ////// Listens to the SSE event stream parsed as regular JSON {event_name: event_data}.
+  ////// Listens to the parsed SSE event stream.
   ///final subscription = stream.listen(
   ///  (event) {
   ///    dev.log(event.toString());
@@ -103,7 +103,7 @@ final class SseRequest extends Request {
           encoding: encoding,
         );
 
-  /// Returns a stream of SSE events as parsed JSON maps.
+  /// Returns a stream of parsed SSE events.
   ///
   /// If you need precise control over the event stream, prefer using the [SseSourceController] or implementing [SseSourceControllerBase].
   ///
@@ -132,7 +132,7 @@ final class SseRequest extends Request {
     return controller.stream;
   }
 
-  /// Sends the SSE request and and transforms ByteStream to Json map for every event.
+  /// Sends the SSE request and and transforms [ByteStream] to [Map<String, dynamic>] for every event.
   ///
   /// [client] is an optional HTTP client to use for the request.
   Future<Stream<Map<String, dynamic>>> sendStreamed(Client? client) async {

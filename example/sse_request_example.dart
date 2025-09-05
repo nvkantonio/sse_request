@@ -24,7 +24,7 @@ void main() async {
   /// Does not connect to the API until the first listener is attached.
   final stream = getRequest.getStream('name:1');
 
-  /// Listens to the SSE event stream parsed as regular JSON {event_name: event_data}.
+  /// Listens to the parsed SSE event stream.
   final subscription = stream.listen(
     (event) {
       dev.log(event.toString());

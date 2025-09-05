@@ -7,7 +7,7 @@ import 'package:http/http.dart';
 import 'package:sse_request/sse_request.dart';
 
 Future<void> main() async {
-  // Create a new instance of SSE stream request each new call because same request cannot be send twice
+  // Create a new SSE stream request for each connection attempt, as a single request instance cannot be reused.
   sseStreamBuilder(Client client) {
     return SseRequest.get(
       uri: Uri.parse('your_api_uri'),

@@ -59,8 +59,8 @@ void main() async {
     },
   );
 
+  // Demonstration delay
   await Future.delayed(Duration(seconds: 10));
-  dev.log('END');
 
   /// Don't forget to close the StreamSubscription to avoid memory leaks.
   subscription.cancel();
@@ -113,7 +113,8 @@ Future<void> main() async {
     },
   );
 
-  // Establish an SSE connection. Until this happens nothing is sent.
+  // Establish an SSE connection.
+  // Until this happens nothing is sent.
   final subscription = controller.stream.listen((event) {
     dev.log(event.toString());
   }, onError: (e) {
@@ -123,7 +124,9 @@ Future<void> main() async {
   // Demonstration delay
   await Future.delayed(Duration(seconds: 10));
 
-  // `dispose()` or `clear()` can be used to force close connection using controller, where `dispose()` ensures you cannot use the controller again.
+  // `dispose()` or `clear()` can be used to force close connection
+  //  using controller, where `dispose()` ensures you cannot use
+  // the controller again.
   controller.dispose();
 }
 ```
@@ -139,7 +142,8 @@ import 'package:http/http.dart';
 import 'package:sse_request/sse_request.dart';
 
 Future<void> main() async {
-  // Create a new instance of SSE stream request each new call because same request cannot be send twice
+  // Create a new SSE stream request for each connection attempt,
+  // as a single request instance cannot be reused.
   sseStreamBuilder(Client client) {
     return SseRequest.get(
       uri: Uri.parse('your_api_uri'),
@@ -149,11 +153,13 @@ Future<void> main() async {
   final controller = SseSourceController(
     name: 'Name:1',
     sseStreamBuilder: sseStreamBuilder,
-    // `actionOnErrorEvent` invoked on every error event with controller instance and error itself
+    // `actionOnErrorEvent` invoked on every error event with
+    // controller instance and error itself
     actionOnErrorEvent: (controller, error, st) async {
       // Implementation of reconnection logic
 
-      // With the callback of `SseSourceController controller`, you can handle how the controller reacts to certain errors.
+      // With the callback of `SseSourceController controller`
+      // you can handle how the controller reacts to certain errors.
       try {
         // Cancel current event listener and close http client
         await controller.clear();
@@ -161,7 +167,8 @@ Future<void> main() async {
         // Connect new event listener
         await controller.connectEventListener(sseStreamBuilder);
       } catch (e) {
-        // On failed connection retry, you can dispose the controller or retry again after a delay.
+        // On failed connection retry, you can dispose the controller
+        // or retry again after a delay.
         await controller.dispose();
         rethrow;
       }
