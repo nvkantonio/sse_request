@@ -11,21 +11,38 @@ typedef EventErrorAction = FutureOr<void> Function(
   StackTrace stackTrace,
 );
 
-/// Simple implementation of [SseSourceControllerBase] where the `onErrorEvent`
-/// action can be specified in parameter, allowing the implementation of
+/// Implementation of [SseSourceControllerBase] where the `onErrorEvent`
+/// action can be specified in parameter, allowing configuration of
 /// reconnection logic.
+///
+/// If you need to specify a custom object for the stream, use
+/// [SseParsedSourceController] instead.
+///
+/// If you need more precise control prefer implementing
+/// [SseSourceControllerBase]
+///
 final class SseSourceController
     extends SseSourceControllerBase<Map<String, dynamic>> {
+  ///
   /// Creates an [SseSourceController] with the given parameters.
   ///
-  /// Simple implementation of [SseSourceControllerBase] where the [actionOnErrorEvent] action can be specified, allowing the implementation
+  /// Implementation of [SseSourceControllerBase] where the [actionOnErrorEvent] action can be specified, allowing the implementation
   /// of reconnection logic.
+  ///
+  /// If you need to specify a custom object for the stream, use
+  /// [SseParsedSourceController] instead.
+  ///
+  /// If you need more precise control prefer implementing
+  /// [SseSourceControllerBase]
   ///
   /// {@macro sse_source_controller_base}
   ///
+  /// {@template do_dispose_on_client_exeption}
   /// - [doDisposeOnClientException] if `true`, disposes the controller when
   /// a ClientException is thrown, otherwise, calls `clear()`.
   /// Works only if the [actionOnErrorEvent] parameter is not specified.
+  ///
+  /// {@endtemplate}
   ///
   /// ---
   ///
@@ -82,7 +99,7 @@ final class SseSourceController
   ///   }
   /// },
   /// ```
-
+  ///
   SseSourceController({
     required super.name,
     required super.sseStreamBuilder,

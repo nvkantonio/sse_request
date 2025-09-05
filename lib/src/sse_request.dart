@@ -8,7 +8,9 @@ import '../sse_source_controllers.dart';
 import '../sse_transformers.dart';
 
 /// An HTTP request where the entire request body is known in advance.
+///
 final class SseRequest extends Request {
+  ///
   /// Creates an SSE request with the specified method, URI, headers, body,
   /// and encoding.
   ///
@@ -58,6 +60,7 @@ final class SseRequest extends Request {
   /// subscription.cancel();
   /// ```
   /// {@endtemplate}
+  ///
   SseRequest({
     required String method,
     required Uri uri,
@@ -109,6 +112,7 @@ final class SseRequest extends Request {
   ///
   /// [subName] is the subscription name.
   /// [useBroadCast] determines if the stream is broadcast.
+  ///
   Stream<Map<String, dynamic>> getStream(
     String subName, [
     bool useBroadCast = false,
@@ -136,6 +140,7 @@ final class SseRequest extends Request {
   /// [Map<String, dynamic>] for every event.
   ///
   /// [client] is an optional HTTP client to use for the request.
+  ///
   Future<Stream<Map<String, dynamic>>> sendStreamed(Client? client) async {
     try {
       final streamedResponse =

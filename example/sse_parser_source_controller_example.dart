@@ -1,6 +1,6 @@
-// Example usage of SseSourceController.
-// Demonstrates how to connect, listen, and handle events/errors
-// using SseSourceController and SseRequest.
+// Example usage of SseParsedSourceController.
+// Demonstrates how to parse events with
+// SseParsedSourceController and SseRequest.
 
 import 'dart:async';
 import 'dart:developer' as dev;
@@ -12,29 +12,23 @@ Future<void> main() async {
     uri: Uri.parse('your_api_uri'),
   );
 
-  final controller = SseSourceController(
+  /// Use [SseParsedSourceController<T>] instead of
+  /// [SseSourceController] to set a custom type for the stream.
+  final controller = SseParsedSourceController<String>(
     // The name used to distinguish connection events for multiple streams.
     name: 'Name:1',
     // Specify the builder function for obtaining the event stream.
     sseStreamBuilder: request.sendStreamed,
-    // Invoked when a new SSE connection is inbound.
-    onNewConnection: (name) => print('Creating new SSE connection to "$name"'),
-    // Invoked when the SSE connection is established.
-    onConnected: (name) => print('Established SSE connection to "$name"'),
-    // Invoked when the SSE connection is closed.
-    onCloseConnection: (name, wasConnected) {
-      if (wasConnected) {
-        print('Closed SSE subscription $name');
-      } else {
-        print('Closed SSE subscription $name without being opened');
-      }
-    },
-    // Invoked when the stream is cancelled.
-    onCancel: (name, wasConnected) {
-      if (wasConnected) {
-        print('Canceled SSE subscription $name');
-      } else {
-        print('Canceled SSE subscription $name without being opened');
+    // Invoked on every new event. Expects to return a value of specified type
+    // or throw an error, which will call [onErrorEvent], so you don't need to
+    // duplicate error handling logic.
+    eventParser: (Map<String, dynamic> event) {
+      // Implement your parser here.
+      try {
+        return event.values.first;
+      } catch (e) {
+        // On unhandled exeption will call [onErrorEvent].
+        rethrow;
       }
     },
   );

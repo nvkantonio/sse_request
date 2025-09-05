@@ -1,5 +1,6 @@
 // Example usage of SseSourceController reconnection.
-// Demonstrates how to handle lost connections and automatically reconnect using SseSourceController and SseRequest.
+// Demonstrates how to handle lost connections and automatically
+//reconnect using SseSourceController and SseRequest.
 
 import 'dart:async';
 import 'dart:developer' as dev;
@@ -19,24 +20,8 @@ Future<void> main() async {
     sseStreamBuilder: sseStreamBuilder,
     // `actionOnErrorEvent` invoked on every error event with
     // controller instance and error itself.
-    onNewConnection: (name) => print('Creating new SSE connection to "$name"'),
-    onConnected: (name) => print('Established SSE connection to "$name"'),
-    onCloseConnection: (name, wasConnected) {
-      if (wasConnected) {
-        print('Closed SSE subscription $name');
-      } else {
-        print('Closed SSE subscription $name without being opened');
-      }
-    },
-    onCancel: (name, wasConnected) {
-      if (wasConnected) {
-        print('Canceled SSE subscription $name');
-      } else {
-        print('Canceled SSE subscription $name without being opened');
-      }
-    },
     actionOnErrorEvent: (controller, error, st) async {
-      // Implementation of reconnection logic
+      // Implement of reconnection logic
       //
       // With the callback of `SseSourceController controller`,
       // you can handle how the controller reacts to certain errors.

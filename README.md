@@ -6,7 +6,9 @@ Built around [dart:http](https://pub.dev/packages/http) [Request](https://pub.de
 ## Features
 
 - Consumes SSE and converts each event into a `Map<String, dynamic>`.
-- Can be configured to autoreconnect or do whatever you want on caught exeption.
+- Configurable and extensible.
+- Can be configured to auto-reconnect or perform any action you want on caught exceptions.
+- Can be configured to parse each event with ease.
 
 ## Getting started
 
@@ -66,7 +68,7 @@ void main() async {
 }
 ```
 
-***For advanced functionality prefer using `SseSourceController` or implementing `SseSourceControllerBase`.***
+***For advanced functionality prefer using `SseSourceController` or `SseParsedSourceController<T>` or implementing `SseSourceControllerBase`.***
 
 ---
 
@@ -183,6 +185,29 @@ Future<void> main() async {
     dev.log('Got exception event $e');
   });
 }
+```
+
+##### Parse each event
+
+```dart
+/// Use [SseParsedSourceController<T>] instead of
+/// [SseSourceController] to set a custom type for the stream.
+SseParsedSourceController<String>(
+  name: 'Name:1',
+  sseStreamBuilder: request.sendStreamed,
+  // Invoked on every new event. Expects to return a value of specified type
+  // or throw an error, which will call [onErrorEvent], so you don't need to
+  // duplicate error handling logic.
+  eventParser: (Map<String, dynamic> event) {
+    // Implement your parser here.
+    try {
+      return event.values.first;
+    } catch (e) {
+      // On unhandled exeption will call [onErrorEvent].
+      rethrow;
+    }
+  },
+);
 ```
 
 #### Some theory
