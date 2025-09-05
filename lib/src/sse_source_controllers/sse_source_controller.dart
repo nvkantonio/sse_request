@@ -123,9 +123,9 @@ final class SseSourceController
 
   @override
   @protected
-  void onErrorEvent(Object error, StackTrace st) {
+  Future<void> onErrorEvent(Object error, StackTrace st) async {
     eventStreamController.addError(error, st);
-    _actionOnErrorEvent(this, error, st);
+    await _actionOnErrorEvent(this, error, st);
   }
 
   @override
