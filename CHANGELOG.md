@@ -1,3 +1,6 @@
+## 0.1.2
+- Docs: Documentation improvement
+
 ## 0.1.1
 - Breaking change: `SseSourceControllerBase` now have generic type
 - New: added `SseParsedSourceController`, which allows for configuration of reconnection logic and parsing of each event into a specified object type.
