@@ -12,9 +12,8 @@ Built around [dart:http](https://pub.dev/packages/http) [Request](https://pub.de
 
 - Add package to pubspec.yaml:
 ```yaml
-sse_request:
-    git:
-      url: https://github.com/nvkantonio/sse_request
+dependencies:
+  sse_request: ^0.1.0
 ```
 
 - Import package:
@@ -22,8 +21,8 @@ sse_request:
 import 'package:sse_request/sse_request.dart';
 ```
 
-- Create an `SseRequest()` object and call `.getStream()`
-- Add a listener to the Stream
+- Create an `SseRequest()` object and call `.getStream()`.
+- Add a listener to the Stream.
 
 ## Usage
 
@@ -49,7 +48,7 @@ void main() async {
   /// Nothing is send until the first listener is attached.
   final stream = getRequest.getStream('name:1');
 
-  /// Listens to the parsed SSE event stream
+  /// Listens to the parsed SSE event stream.
   final subscription = stream.listen(
     (event) {
       dev.log(event.toString());
@@ -59,7 +58,7 @@ void main() async {
     },
   );
 
-  // Demonstration delay
+  // Demonstration delay.
   await Future.delayed(Duration(seconds: 10));
 
   /// Don't forget to close the StreamSubscription to avoid memory leaks.
@@ -81,15 +80,15 @@ import 'dart:developer' as dev;
 import 'package:sse_request/sse_request.dart';
 
 Future<void> main() async {
-  // Create an SSE GET request
+  // Create an SSE GET request.
   final request = SseRequest.get(
     uri: Uri.parse('your_api_uri'),
   );
 
   final controller = SseSourceController(
-    // The name used to distinguish connection events for multiple streams
+    // The name used to distinguish connection events for multiple streams.
     name: 'Name:1',
-    // Specify the builder function for obtaining the event stream
+    // Specify the builder function for obtaining the event stream.
     sseStreamBuilder: request.sendStreamed,
     // Invoked when a new SSE connection is inbound.
     onNewConnection: (name) => dev.log('Creating new SSE connection to "$name"'),
@@ -114,18 +113,21 @@ Future<void> main() async {
   );
 
   // Establish an SSE connection.
-  // Until this happens nothing is sent.
+  // Nothing is sent until this happens.
   final subscription = controller.stream.listen((event) {
     dev.log(event.toString());
   }, onError: (e) {
     dev.log(e.toString());
   });
 
-  // Demonstration delay
+  // Demonstration delay.
   await Future.delayed(Duration(seconds: 10));
 
-  // `dispose()` or `clear()` can be used to force close connection
-  //  using controller, where `dispose()` ensures you cannot use
+  /// Don't forget to close the StreamSubscription to avoid memory leaks.
+  subscription.cancel();
+
+  // `dispose()` or `clear()` methods can be used to force close connection
+  // using controller, where `dispose()` ensures you cannot use
   // the controller again.
   controller.dispose();
 }
@@ -154,17 +156,17 @@ Future<void> main() async {
     name: 'Name:1',
     sseStreamBuilder: sseStreamBuilder,
     // `actionOnErrorEvent` invoked on every error event with
-    // controller instance and error itself
+    // controller instance and error itself.
     actionOnErrorEvent: (controller, error, st) async {
-      // Implementation of reconnection logic
-
+      // Implementation of reconnection logic.
+      //
       // With the callback of `SseSourceController controller`
       // you can handle how the controller reacts to certain errors.
       try {
-        // Cancel current event listener and close http client
+        // Cancel current event listener and close http client.
         await controller.clear();
 
-        // Connect new event listener
+        // Connect new event listener.
         await controller.connectEventListener(sseStreamBuilder);
       } catch (e) {
         // On failed connection retry, you can dispose the controller
@@ -174,6 +176,7 @@ Future<void> main() async {
       }
     },
   );
+
   final subscription = controller.stream.listen((event) {
     dev.log(event.toString());
   }, onError: (e) {
@@ -182,7 +185,7 @@ Future<void> main() async {
 }
 ```
 
-#### Some boring theory
+#### Some theory
 
 The package consists of two parts:
 - Data stream converters.

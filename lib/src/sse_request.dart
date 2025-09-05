@@ -7,22 +7,21 @@ import 'package:http/http.dart';
 import '../sse_source_controllers.dart';
 import '../sse_transformers.dart';
 
-/// Represents an HTTP SSE request with a known request body.
-///
-/// For precise control, prefer usage of the [sse_transformers.dart] library instead.
+/// An HTTP request where the entire request body is known in advance.
 final class SseRequest extends Request {
-  /// Creates an SSE request with the specified method, URI, headers, body, and encoding.
+  /// Creates an SSE request with the specified method, URI, headers, body,
+  /// and encoding.
+  ///
   /// {@template sse_request}
+  /// - [method] is the request method of [SseRequestType].
   ///
-  /// [method] is the request method of [SseRequestType].
+  /// - [uri] is the URL of the SSE endpoint.
   ///
-  /// [uri] is the URL of the SSE endpoint.
+  /// - [headers] is a map of request headers.
   ///
-  /// [headers] is a map of request headers.
+  /// - [body] is an optional request body for POST requests.
   ///
-  /// [body] is an optional request body for POST requests.
-  ///
-  /// [encoding] is the preferred encoding to decode the SSE stream.
+  /// - [encoding] is the preferred encoding to decode the SSE stream.
   ///
   /// Adds next default headers:
   /// ```json
@@ -31,32 +30,32 @@ final class SseRequest extends Request {
   ///
   /// Example:
   /// ```dart
-  ////// Creates an [SseRequest] for a POST request.
-  ///final request = SseRequest.post(
-  ///  uri: Uri.parse('your_uri'),
-  ///  headers: {'hello': 'world'},
-  ///  body: {'hello': 'world'},
-  ///);
+  /// /// Creates an [SseRequest] for a POST request.
+  /// final request = SseRequest.post(
+  ///   uri: Uri.parse('your_uri'),
+  ///   headers: {'hello': 'world'},
+  ///   body: {'hello': 'world'},
+  /// );
   ///
-  ////// Obtains a [Stream] of events.
-  ////// Does not connect to the API until the first listener is attached.
-  ///final stream = request.getStream('name:1');
+  /// /// Obtains a [Stream] of events.
+  /// /// Nothing is send until the first listener is attached.
+  /// final stream = request.getStream('name:1');
   ///
-  ////// Listens to the parsed SSE event stream.
-  ///final subscription = stream.listen(
-  ///  (event) {
-  ///    dev.log(event.toString());
-  ///  },
-  ///  onError: (e) {
-  ///    dev.log('Invalid SSE message: $e');
-  ///  },
-  ///);
+  /// /// Listens to the parsed SSE event stream.
+  /// final subscription = stream.listen(
+  ///   (event) {
+  ///     dev.log(event.toString());
+  ///   },
+  ///   onError: (e) {
+  ///     dev.log('Invalid SSE message: $e');
+  ///   },
+  /// );
   ///
-  ///await Future.delayed(Duration(seconds: 10));
-  ///dev.log('END');
+  /// // Demonstration delay.
+  /// await Future.delayed(Duration(seconds: 10));
   ///
-  ////// Don't forget to close the StreamSubscription to avoid memory leaks.
-  ///subscription.cancel();
+  /// /// Don't forget to close the StreamSubscription to avoid memory leaks.
+  /// subscription.cancel();
   /// ```
   /// {@endtemplate}
   SseRequest({
@@ -105,7 +104,8 @@ final class SseRequest extends Request {
 
   /// Returns a stream of parsed SSE events.
   ///
-  /// If you need precise control over the event stream, prefer using the [SseSourceController] or implementing [SseSourceControllerBase].
+  /// If you need precise control over the event stream, prefer using
+  /// [SseSourceController] or implementing [SseSourceControllerBase].
   ///
   /// [subName] is the subscription name.
   /// [useBroadCast] determines if the stream is broadcast.
@@ -132,7 +132,8 @@ final class SseRequest extends Request {
     return controller.stream;
   }
 
-  /// Sends the SSE request and and transforms [ByteStream] to [Map<String, dynamic>] for every event.
+  /// Sends the SSE request and and transforms [ByteStream] to
+  /// [Map<String, dynamic>] for every event.
   ///
   /// [client] is an optional HTTP client to use for the request.
   Future<Stream<Map<String, dynamic>>> sendStreamed(Client? client) async {

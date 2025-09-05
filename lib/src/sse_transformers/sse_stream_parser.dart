@@ -6,7 +6,8 @@ import '../exceptions.dart';
 
 /// Raw SSE response event parser to [Map<String, dynamic>].
 ///
-/// For more information about the SSE protocol, refer to the documentation: https://html.spec.whatwg.org/multipage/server-sent-events.html
+/// For more information about the SSE protocol, refer to the documentation:
+/// https://html.spec.whatwg.org/multipage/server-sent-events.html
 final class SseStreamParserSink
     extends EventSinkTransformer<String, Map<String, dynamic>> {
   const SseStreamParserSink(super.outputSink);
@@ -56,7 +57,8 @@ final class SseStreamParserSink
   }
 
   /// Parses each separated line of an SSE event.
-  // TODO(nvkantonio): Rework this to properly utilize SSE documentation practices
+  //TODO(nvkantonio): Rework this to properly utilize
+  // SSE documentation practices
   static MapEntry<String, dynamic> parseLine(String line) {
     try {
       final separatorIndex = line.indexOf(': ');

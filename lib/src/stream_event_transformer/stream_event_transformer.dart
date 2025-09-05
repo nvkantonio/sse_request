@@ -9,7 +9,8 @@ typedef EventSinkConstructor<S> = EventSinkTransformer Function(EventSink<S>);
 /// A simple implementation of [StreamTransformerBase] for event sinks.
 class SimpleStreamEventSinkTransformer<T, S>
     extends StreamTransformerBase<T, S> {
-  /// Creates a [SimpleStreamEventSinkTransformer] with the given event sink constructor.
+  /// Creates a [SimpleStreamEventSinkTransformer] with the given
+  /// event sink constructor.
   const SimpleStreamEventSinkTransformer(this.eventSink);
 
   /// Factory constructor to create a transformer from a sink constructor.

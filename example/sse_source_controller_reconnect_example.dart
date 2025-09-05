@@ -17,6 +17,8 @@ Future<void> main() async {
   final controller = SseSourceController(
     name: 'Name:1',
     sseStreamBuilder: sseStreamBuilder,
+    // `actionOnErrorEvent` invoked on every error event with
+    // controller instance and error itself.
     onNewConnection: (name) => print('Creating new SSE connection to "$name"'),
     onConnected: (name) => print('Established SSE connection to "$name"'),
     onCloseConnection: (name, wasConnected) {
@@ -33,9 +35,11 @@ Future<void> main() async {
         print('Canceled SSE subscription $name without being opened');
       }
     },
-    // Implementation of reconnection logic
     actionOnErrorEvent: (controller, error, st) async {
-      // With the callback of `SseSourceController controller`, you can handle how the controller reacts to certain errors.
+      // Implementation of reconnection logic
+      //
+      // With the callback of `SseSourceController controller`,
+      // you can handle how the controller reacts to certain errors.
       try {
         print(error.toString());
 
@@ -45,7 +49,8 @@ Future<void> main() async {
         // Connect new event listener
         await controller.connectEventListener(sseStreamBuilder);
       } catch (e) {
-        // On unsuccessful connection retry, you can dispose the controller or retry again after a delay.
+        // On unsuccessful connection retry, you can dispose the controller
+        // or retry again after a delay.
         await controller.dispose();
         rethrow;
       }
@@ -62,6 +67,7 @@ Future<void> main() async {
   // Simulate lost connection after delay
   await Future.delayed(Duration(seconds: 3));
   print('Closing client');
+
   // ignore: invalid_use_of_protected_member
   controller.closeClient();
 

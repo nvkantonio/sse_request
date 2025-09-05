@@ -21,7 +21,7 @@ void main() async {
   );
 
   /// Obtains a [Stream] of events.
-  /// Does not connect to the API until the first listener is attached.
+  /// Nothing is send until the first listener is attached.
   final stream = getRequest.getStream('name:1');
 
   /// Listens to the parsed SSE event stream.
@@ -34,6 +34,7 @@ void main() async {
     },
   );
 
+  // Demonstration delay.
   await Future.delayed(Duration(seconds: 10));
   dev.log('END');
 

@@ -9,29 +9,44 @@ import '../../sse_transformers.dart';
 typedef ConnectionStreamBuilder = FutureOr<Stream<Map<String, dynamic>>>
     Function(Client client);
 
-/// Base class for SSE source controllers. Manages connection lifecycle and event handling. Sets up the event stream controller with custom `onListen` and `onCancel`.
+/// Base class for SSE source controllers. Manages connection lifecycle
+/// and event handling. Sets up the event stream controller with
+/// custom `onListen` and `onCancel`.
 abstract class SseSourceControllerBase
     extends StreamSourceController<Map<String, dynamic>> {
-  /// Manages connection lifecycle and event handling. Sets up the event stream controller with custom `onListen` and `onCancel`.
+  /// Manages connection lifecycle and event handling. Sets up the event stream
+  /// controller with custom `onListen` and `onCancel`.
   ///
   /// {@template sse_source_controller_base}
-  /// Use `stream.listen()` to establish an SSE connection. This stream is separate from the SSE stream, which means if the connection to the server is lost, a new SSE stream can be attached with `connectEventListener()` after calling the `clear()` method.
+  /// Use `stream.listen()` to establish an SSE connection. This stream is
+  /// separate from the SSE stream, which means if the connection to the server
+  /// is lost, a new SSE stream can be attached with `connectEventListener()`
+  /// after calling the `clear()` method.
   ///
-  /// [name] is the name of the SSE subscription.
+  /// - [name] is the name of the SSE subscription.
   ///
-  /// [sseStreamBuilder] is builder responsible for creating the SSE connection stream.
+  /// - [sseStreamBuilder] is builder responsible for creating the SSE
+  /// connection stream.
   ///
-  /// [isBroadCast] - if `true`, uses a broadcast stream controller, otherwise, uses a single-subscription stream controller. Defaults to `false`.
+  /// - [isBroadCast] - if `true`, uses a broadcast stream controller,
+  /// otherwise, uses a single-subscription stream controller.
+  /// Defaults to `false`.
   ///
-  /// [doDisposeOnCancel] - if `true`, disposes the controller when the stream is cancelled, otherwise clears the controller. Defaults to `true`.
+  /// - [doDisposeOnCancel] - if `true`, disposes the controller when
+  /// the stream is cancelled, otherwise clears the controller.
+  /// Defaults to `true`.
   ///
-  /// [onNewConnection] is optional callback invoked when a new SSE connection is inbound.
+  /// - [onNewConnection] is optional callback invoked when
+  /// a new SSE connection is inbound.
   ///
-  /// [onConnected] is optional callback invoked when the SSE connection is connected.
+  /// - [onConnected] is optional callback invoked when
+  /// SSE connection is established.
   ///
-  /// [onCloseConnection] is optional callback invoked when the SSE connection is closed.
+  /// - [onCloseConnection] is optional callback invoked when
+  /// SSE connection is closed.
   ///
-  /// [onCancel] is optional callback invoked when the stream is cancelled, providing the controller name and connection status.
+  /// - [onCancel] is optional callback invoked when the stream is cancelled,
+  /// providing the controller name and connection status.
   /// {@endtemplate}
   SseSourceControllerBase({
     required this.name,

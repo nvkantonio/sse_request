@@ -5,7 +5,8 @@ import '../exceptions.dart';
 
 /// SSE event stream splitter. Separates each event from multiple events.
 ///
-/// For more information about the SSE protocol, refer to the documentation: https://html.spec.whatwg.org/multipage/server-sent-events.html
+/// For more information about the SSE protocol, refer to the documentation:
+/// https://html.spec.whatwg.org/multipage/server-sent-events.html
 final class SseStreamSplitterSink extends EventSinkTransformer<String, String> {
   const SseStreamSplitterSink(super.outputSink);
 
