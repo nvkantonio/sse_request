@@ -7,25 +7,23 @@ import 'dart:developer' as dev;
 import 'package:sse_request/sse_request.dart';
 
 Future<void> main() async {
-  // Create an SSE GET request
-  final request = SseRequest.get(
-    uri: Uri.parse('your_api_uri'),
-  );
-
   /// Use [SseParsedSourceController<T>] instead of
   /// [SseSourceController] to set a custom type for the stream.
   final controller = SseParsedSourceController<String>(
     // This name used to distinguish connection events for multiple streams.
     name: 'Name:1',
     // Specify the builder function for obtaining the event stream.
-    sseStreamBuilder: request.sendStreamed,
+    sseStreamBuilder: (client) => sseRequestGetSendStreamed(
+      uri: Uri.parse('your_api_uri'),
+      client: client,
+    ),
     // Invoked on every new event. Expects to return a value of specified type
     // or throw an error, which will call [onErrorEvent], so you don't need to
     // duplicate error handling logic.
     eventParser: (Map<String, dynamic> event) {
       // Implement your parser here.
       try {
-        return event.values.first;
+        return event['response'];
       } catch (e) {
         // On unhandled exeption will call [onErrorEvent].
         rethrow;
@@ -34,7 +32,7 @@ Future<void> main() async {
   );
 
   // Establish an SSE connection.
-  // Nothing is sent until this happens.
+  // Nothing is sent until the first listener is attached.
   final subscription = controller.stream.listen((event) {
     dev.log(event.toString());
   }, onError: (e) {

@@ -7,16 +7,14 @@ import 'dart:developer' as dev;
 import 'package:sse_request/sse_request.dart';
 
 Future<void> main() async {
-  // Create an SSE GET request
-  final request = SseRequest.get(
-    uri: Uri.parse('your_api_uri'),
-  );
-
   final controller = SseSourceController(
     // This name used to distinguish connection events for multiple streams.
     name: 'Name:1',
     // Specify the builder function for obtaining the event stream.
-    sseStreamBuilder: request.sendStreamed,
+    sseStreamBuilder: (client) => sseRequestGetSendStreamed(
+      uri: Uri.parse('your_api_uri'),
+      client: client,
+    ),
     // Invoked when a new SSE connection is inbound.
     onNewConnection: (name) => print('Creating new SSE connection to "$name"'),
     // Invoked when the SSE connection is established.
@@ -40,7 +38,7 @@ Future<void> main() async {
   );
 
   // Establish an SSE connection.
-  // Nothing is sent until this happens.
+  // Nothing is sent until the first listener is attached.
   final subscription = controller.stream.listen((event) {
     dev.log(event.toString());
   }, onError: (e) {

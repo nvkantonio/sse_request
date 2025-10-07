@@ -8,12 +8,11 @@ import 'package:http/http.dart';
 import 'package:sse_request/sse_request.dart';
 
 Future<void> main() async {
-  // Create a new SSE stream request for each connection attempt, as a single request instance cannot be reused.
-  sseStreamBuilder(Client client) {
-    return SseRequest.get(
-      uri: Uri.parse('your_api_uri'),
-    ).sendStreamed(client);
-  }
+  // Create a new SSE stream request for each connection attempt
+  sseStreamBuilder(Client client) => sseRequestGetSendStreamed(
+        uri: Uri.parse('your_api_uri'),
+        client: client,
+      );
 
   final controller = SseSourceController(
     name: 'Name:1',
