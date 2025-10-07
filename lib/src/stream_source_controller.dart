@@ -26,4 +26,12 @@ abstract class StreamSourceController<T> {
       await eventStreamController.close();
     }
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is StreamSourceController && sink == other.sink;
+
+  @override
+  int get hashCode => sink.hashCode;
 }

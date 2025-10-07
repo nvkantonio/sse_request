@@ -195,4 +195,15 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
     _client?.close();
     _client = null;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SseSourceControllerBase &&
+          name == other.name &&
+          _client == other._client &&
+          sink == other.sink;
+
+  @override
+  int get hashCode => Object.hash(name, _client, sink);
 }
