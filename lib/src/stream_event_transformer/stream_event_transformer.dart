@@ -24,7 +24,7 @@ class SimpleStreamEventSinkTransformer<T, S>
 
   /// Maps the provided sink using the event sink constructor.
   @protected
-  EventSink mapSink(sink) => eventSink(sink);
+  EventSink mapSink(EventSink<S> sink) => eventSink(sink);
 
   /// Binds the transformer to the provided stream.
   @override

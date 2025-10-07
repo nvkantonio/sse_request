@@ -15,7 +15,7 @@ abstract class EventSinkTransformer<T, S> implements EventSink<T> {
   void add(T event);
 
   @override
-  void addError(e, [st]) => outputSink.addError(e, st);
+  void addError(Object e, [StackTrace? st]) => outputSink.addError(e, st);
 
   @override
   void close() => outputSink.close();
