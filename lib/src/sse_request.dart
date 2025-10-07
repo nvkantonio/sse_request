@@ -13,7 +13,6 @@ final class SseRequest extends Request {
   /// Creates an SSE request with the specified method, URI, headers, body,
   /// and encoding.
   ///
-  /// {@template sse_request}
   /// - [method] is the request method of [SseRequestType].
   ///
   /// - [uri] is the URL of the SSE endpoint.
@@ -24,6 +23,7 @@ final class SseRequest extends Request {
   ///
   /// - [encoding] is the preferred encoding to decode the SSE stream.
   ///
+  /// {@template sse_request}
   /// Adds next default headers:
   /// ```json
   /// {"Cache-Control" = "no-cache", "Accept" = "text/event-stream"}
@@ -86,6 +86,14 @@ final class SseRequest extends Request {
 
   /// Creates an SSE GET request.
   ///
+  /// - [method] is the request method of [SseRequestType].
+  ///
+  /// - [uri] is the URL of the SSE endpoint.
+  ///
+  /// - [headers] is a map of request headers.
+  ///
+  /// - [encoding] is the preferred encoding to decode the SSE stream.
+  ///
   /// {@macro sse_request}
   SseRequest.get({
     required Uri uri,
@@ -94,6 +102,16 @@ final class SseRequest extends Request {
   }) : this(method: 'GET', headers: headers, uri: uri, encoding: encoding);
 
   /// Creates an SSE POST request.
+  ///
+  /// - [method] is the request method of [SseRequestType].
+  ///
+  /// - [uri] is the URL of the SSE endpoint.
+  ///
+  /// - [headers] is a map of request headers.
+  ///
+  /// - [body] is an optional request body for POST requests.
+  ///
+  /// - [encoding] is the preferred encoding to decode the SSE stream.
   ///
   /// {@macro sse_request}
   SseRequest.post({

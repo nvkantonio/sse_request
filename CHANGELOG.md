@@ -1,7 +1,23 @@
+## 0.2.0
+
+- New:
+  - Obtain handled stream and event stream straight from request shothand methods
+  - Isolated sse request handlers to be used within any `BaseRequest`
+  - Added equality checks to StreamSourceController and SseSourceControllerBase
+- Fix: Type annotations
+- Example: Updated using request shothand
+- Test: Updated using request shothand
+- Docs:
+  - Updated README
+  - Added documentation to shothand methods
+  - Updated code documentation
+
 ## 0.1.2
+
 - Docs: Documentation improvement
 
 ## 0.1.1
+
 - Breaking change: `SseSourceControllerBase` now have generic type
 - New: added `SseParsedSourceController`, which allows for configuration of reconnection logic and parsing of each event into a specified object type.
 

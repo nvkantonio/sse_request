@@ -48,21 +48,19 @@ final class SseSourceController
   ///
   /// #### Example usage of [SseSourceController]:
   /// ```dart
-  /// // Create an SSE GET request.
-  /// final request = SseRequest.get(
-  ///   uri: Uri.parse('your_api_uri'),
-  /// );
-  ///
   /// final controller = SseSourceController(
   ///   // This name used to distinguish connection events for multiple streams.
   ///   name: 'Name:1',
   ///   // Specify the builder function for obtaining the event stream.
-  ///   sseStreamBuilder: request.sendStreamed,
+  ///   sseStreamBuilder: (client) => sseRequestGetSendStreamed(
+  ///     uri: Uri.parse('your_api_uri'),
+  ///     client: client,
+  ///   ),
   /// );
   ///
   /// // Establish an SSE connection.
   /// //
-  /// // Nothing is sent until this happens.
+  /// // Nothing is sent until the first listener is attached.
   /// final subscription = controller.stream.listen((event) {});
   ///
   /// // Demonstration delay.

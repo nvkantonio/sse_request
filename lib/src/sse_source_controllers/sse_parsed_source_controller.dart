@@ -46,18 +46,16 @@ final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
   /// Example usage of [SseParsedSourceController]
   ///
   /// ```dart
-  ///  // Create an SSE GET request
-  /// final request = SseRequest.get(
-  ///   uri: Uri.parse('your_api_uri'),
-  /// );
-  ///
   /// /// Use [SseParsedSourceController<T>] instead of
   /// /// [SseSourceController] to set a custom type for the stream.
   /// final controller = SseParsedSourceController<String>(
   ///   // This name used to distinguish connection events for multiple streams.
   ///   name: 'Name:1',
   ///   // Specify the builder function for obtaining the event stream.
-  ///   sseStreamBuilder: request.sendStreamed,
+  ///   sseStreamBuilder: (client) => sseRequestGetSendStreamed(
+  ///     uri: Uri.parse('your_api_uri'),
+  ///     client: client,
+  ///   ),
   ///   // Invoked on every new event.
   ///   // Expects to return a value of specified type
   ///   // or throw an error, which will call [onErrorEvent],
@@ -65,7 +63,7 @@ final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
   ///   eventParser: (Map<String, dynamic> event) {
   ///     // Implement your parser here.
   ///     try {
-  ///       return event.values.first;
+  ///       return event['response'];
   ///     } catch (e) {
   ///       // On unhandled exeption will call [onErrorEvent].
   ///       rethrow;
@@ -75,7 +73,7 @@ final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
   ///
   /// // Establish an SSE connection.
   /// //
-  /// // Nothing is sent until this happens.
+  /// // Nothing is sent until the first listener is attached.
   /// final subscription = controller.stream.listen((event) {});
   ///
   /// // Demonstration delay.
