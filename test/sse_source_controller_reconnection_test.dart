@@ -10,11 +10,10 @@ import 'package:test/test.dart';
 
 void main() async {
   test('Testing sse chat messages', () async {
-    sseStreamBuilder(Client client) {
-      return SseRequest.get(
-        uri: Uri.parse('your_api_uri'),
-      ).sendStreamed(client);
-    }
+    sseStreamBuilder(Client client) => sseRequestGetSendStreamed(
+          uri: Uri.parse('your_api_uri'),
+          client: client,
+        );
 
     final controller = SseSourceController(
       name: 'Name:1',

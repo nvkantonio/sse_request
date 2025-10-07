@@ -8,13 +8,12 @@ import 'package:test/test.dart';
 
 void main() async {
   test('Testing sse chat messages', () async {
-    final request = SseRequest.get(
-      uri: Uri.parse('your_api_uri'),
-    );
-
     final controller = SseSourceController(
       name: 'Name:1',
-      sseStreamBuilder: request.sendStreamed,
+      sseStreamBuilder: (client) => sseRequestGetSendStreamed(
+        uri: Uri.parse('your_api_uri'),
+        client: client,
+      ),
       onNewConnection: (name) =>
           print('Creating new SSE connection to "$name"'),
       onConnected: (name) => print('Established SSE connection to "$name"'),
