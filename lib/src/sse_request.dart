@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer' as dev;
 
 import 'package:http/http.dart';
 
@@ -61,7 +60,7 @@ final class SseRequest extends Request {
   /// await Future.delayed(Duration(seconds: 10));
   ///
   /// /// Don't forget to close the [StreamSubscription]
-  /// to avoid memory leaks.
+  /// /// to avoid memory leaks.
   /// subscription.cancel();
   /// ```
   /// {@endtemplate}
@@ -122,44 +121,14 @@ final class SseRequest extends Request {
   Stream<Map<String, dynamic>> getStream(
     String subName, [
     bool useBroadCast = false,
-  ]) {
-    final controller = SseSourceController(
-      isBroadCast: useBroadCast,
-      name: subName,
-      sseStreamBuilder: sendStreamed,
-      onNewConnection: (name) =>
-          dev.log('Creating new SSE connection to "$name"'),
-      onConnected: (name) => dev.log('Established SSE connection to "$name"'),
-      onCloseConnection: (name, wasConnected) {
-        if (wasConnected) {
-          dev.log('Closed SSE subscription $name');
-        } else {
-          dev.log('Closed SSE subscription $name without being opened');
-        }
-      },
-    );
+  ]) =>
+      getRequestStream(
+        subName: subName,
+        useBroadCast: useBroadCast,
+      );
 
-    return controller.stream;
-  }
-
-  /// Sends the SSE request and and transforms [ByteStream] to
+  /// Sends the request and transforms [ByteStream] to
   /// [Map<String, dynamic>] for every event.
-  ///
-  /// [client] is an optional HTTP client to use for the request.
-  ///
-  Future<Stream<Map<String, dynamic>>> sendStreamed(Client? client) async {
-    try {
-      final streamedResponse =
-          await (client != null ? client.send(this) : send());
-
-      final transformedResponseStream = streamedResponse.stream
-          .transform(encoding.decoder)
-          .transform(sseStreamSplitter)
-          .transform(sseStreamParser);
-
-      return transformedResponseStream;
-    } catch (e) {
-      rethrow;
-    }
-  }
+  Future<Stream<Map<String, dynamic>>> sendStreamed(Client? client) async =>
+      sendStreamedRequest(client: client);
 }
