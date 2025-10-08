@@ -81,6 +81,11 @@ void main() async {
 
 ### Going further
 
+The package consists of two parts:
+
+- Data stream converters.
+- Data stream controller `SseSourceController`, which manages connection lifecycle and event handling.
+
 #### Usage of `SseSourceController`
 
 ```dart
@@ -89,11 +94,6 @@ import 'dart:developer' as dev;
 import 'package:sse_request/sse_request.dart';
 
 Future<void> main() async {
-  // Create an SSE GET request.
-  final request = SseRequest.get(
-    uri: Uri.parse('your_api_uri'),
-  );
-
   final controller = SseSourceController(
     // This name used to distinguish connection events for multiple streams.
     name: 'Name:1',
@@ -216,40 +216,7 @@ SseParsedSourceController<String>(
 );
 ```
 
-#### Some explanation
-
-The package consists of two parts:
-
-- Data stream converters.
-- Data stream controller `SseSourceController`. Manages connection lifecycle and event handling.
-
-To connect to a data stream, package use `BaseRequest`'s `send()` from the `dart:http` library, which returns a `StreamedResponse`. Instead of waiting for the entire response, you can access `streamedResponse.stream` to receive data as it arrives. This stream provides raw bytes (`ByteData`), which should be decoded and parsed into usable events.
-
-Example of creating a custom `StreamedResponse` converter:
-
-```dart
-import 'package:http/http.dart' as http;
-import 'package:sse_request/sse_transformers.dart';
-
-Future<Stream> getStream(http.BaseRequest request) async {
-  http.StreamedResponse response = await request.send();
-
-  http.ByteStream byteStream = response.stream;
-
-  Stream<Map<String, dynamic>> convertedSseStream = byteStream
-      .transform(encoding.decoder)
-      .transform(sseStreamSplitter)
-      .transform(sseStreamParser);
-
-  return convertedSseStream;
-}
-```
-
-`SseRequest` is just a wrapper around `http.Request`, so you can use any method to obtain a data stream and pass it to `SseSourceController`. This is exactly what `SseRequest` does in its `getStream()` method.
-
 ## Additional info
-
-- This package does not support bidirectional protocol implementation. In that case, consider using the [official sse package](https://pub.dev/packages/sse) instead.
 
 Known issues:
 

@@ -39,6 +39,13 @@ extension RequestHandlers on BaseRequest {
 
   /// Sends the request and transforms [ByteStream] to
   /// [Map<String, dynamic>] for every event.
+  ///
+  /// To connect to a data stream, package use `BaseRequest`'s `send()`,
+  /// which returns a `StreamedResponse`.
+  /// Instead of waiting for the entire response, you can access
+  /// `streamedResponse.stream` to receive data as it arrives.
+  /// This stream provides raw bytes (`ByteData`), which should be decoded
+  /// and parsed into usable events.
   Future<Stream<Map<String, dynamic>>> sendStreamedRequest({
     Client? client,
     Encoding? encoding,
