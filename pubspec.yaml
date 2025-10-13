@@ -4,6 +4,11 @@ version: 0.2.0
 repository: https://github.com/nvkantonio/sse_request
 homepage: https://github.com/nvkantonio/sse_request
 issue_tracker: https://github.com/nvkantonio/sse_request/issues
+topics:
+  - sse
+  - server-sent-events
+  - configurable
+  - http-stream
 
 platforms:
   android:
