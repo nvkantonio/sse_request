@@ -1,7 +1,6 @@
 # SSE_REQUEST
 
 Simple SSE (Server-Sent Events) consumer.
-Built around [dart:http](https://pub.dev/packages/http) [Request](https://pub.dev/documentation/http/latest/http/Request-class.html).
 
 ## Features
 
@@ -16,7 +15,7 @@ Built around [dart:http](https://pub.dev/packages/http) [Request](https://pub.de
 
 ```yaml
 dependencies:
-  sse_request: ^0.1.1
+  sse_request: ^0.2.1
 ```
 
 - Import package:
