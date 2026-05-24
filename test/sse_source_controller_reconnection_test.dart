@@ -51,7 +51,7 @@ void main() async {
       final subscription = controller.stream.listen((event) {
         print(event.toString());
       }, onError: (e) {
-        print('Got exeption event $e');
+        print('Got exception event $e');
         if (e is! ClientException) {
           throw e;
         }

@@ -208,7 +208,7 @@ SseParsedSourceController<String>(
     try {
       return event['response'];
     } catch (e) {
-      // On unhandled exeption will call [onErrorEvent].
+      // On unhandled exception will call [onErrorEvent].
       rethrow;
     }
   },

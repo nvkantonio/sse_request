@@ -39,7 +39,7 @@ final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
   ///
   /// {@macro sse_source_controller_base}
   ///
-  /// {@macro do_dispose_on_client_exeption}
+  /// {@macro do_dispose_on_client_exception}
   ///
   /// ---
   ///
@@ -65,7 +65,7 @@ final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
   ///     try {
   ///       return event['response'];
   ///     } catch (e) {
-  ///       // On unhandled exeption will call [onErrorEvent].
+  ///       // On unhandled exception will call [onErrorEvent].
   ///       rethrow;
   ///     }
   ///   },
@@ -94,7 +94,7 @@ final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
     required this.eventParser,
     super.isBroadCast,
     super.doDisposeOnCancel,
-    bool doDisposeOnClientExeption = false,
+    bool doDisposeOnClientException = false,
     super.onNewConnection,
     super.onConnected,
     super.onCloseConnection,
@@ -112,7 +112,7 @@ final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
         Map<String, dynamic>? sourceEvent,
       ]) async {
         if (error is ClientException) {
-          doDisposeOnClientExeption
+          doDisposeOnClientException
               ? await controller.dispose()
               : await controller.clear();
         }

@@ -135,9 +135,9 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
       onConnected?.call(name);
     } catch (e, st) {
       eventStreamController.addError(
-        SseConnectionExeption(
+        SseConnectionException(
           message: 'Could not connect to SSE: $e',
-          originalExeption: e,
+          originalException: e,
         ),
         st,
       );

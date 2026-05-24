@@ -35,13 +35,13 @@ final class SseByteStreamSplitterSink
         addToSink(splittedEvent);
       }
     } catch (e) {
-      final exeption = ByteStreamSplitException(
+      final exception = ByteStreamSplitException(
         message: "Failed to split SSE",
         source: event,
-        originalExeption: e,
+        originalException: e,
       );
-      addError(exeption);
-      dev.log(exeption.toString());
+      addError(exception);
+      dev.log(exception.toString());
       dev.inspect(event);
     }
   }

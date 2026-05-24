@@ -37,7 +37,7 @@ final class SseSourceController
   ///
   /// {@macro sse_source_controller_base}
   ///
-  /// {@template do_dispose_on_client_exeption}
+  /// {@template do_dispose_on_client_exception}
   /// - [doDisposeOnClientException] if `true`, disposes the controller when
   /// a ClientException is thrown, otherwise, calls `clear()`.
   /// Works only if the [actionOnErrorEvent] parameter is not specified.
@@ -104,7 +104,7 @@ final class SseSourceController
     required super.sseStreamBuilder,
     super.isBroadCast,
     super.doDisposeOnCancel,
-    bool doDisposeOnClientExeption = false,
+    bool doDisposeOnClientException = false,
     super.onNewConnection,
     super.onConnected,
     super.onCloseConnection,
@@ -121,7 +121,7 @@ final class SseSourceController
         StackTrace stackTrace,
       ) async {
         if (error is ClientException) {
-          doDisposeOnClientExeption
+          doDisposeOnClientException
               ? await controller.dispose()
               : await controller.clear();
         }

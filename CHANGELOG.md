@@ -1,3 +1,9 @@
+## 0.3.0
+
+- Update: StreamSourceController implements StreamController.
+- Breaking change:
+  - Fix class name typos
+
 ## 0.2.1
 
 - Added tags to pubspec.yaml
@@ -6,15 +12,15 @@
 ## 0.2.0
 
 - New:
-  - Obtain handled stream and event stream straight from request shothand methods
+  - Obtain handled stream and event stream straight from request shorthand methods
   - Isolated sse request handlers to be used within any `BaseRequest`
   - Added equality checks to StreamSourceController and SseSourceControllerBase
 - Fix: Type annotations
-- Example: Updated using request shothand
-- Test: Updated using request shothand
+- Example: Updated using request shorthand
+- Test: Updated using request shorthand
 - Docs:
   - Updated README
-  - Added documentation to shothand methods
+  - Added documentation to shorthand methods
   - Updated code documentation
 
 ## 0.1.2
@@ -36,7 +42,7 @@
 ## 0.0.3
 
 - Rework: `SseRequest` now decodes SSE event stream first, then splits it to events
-- Fix: stream parser invalid exeptions
+- Fix: stream parser invalid exceptions
 
 ## 0.0.2
 

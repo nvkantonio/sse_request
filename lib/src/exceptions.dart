@@ -3,22 +3,22 @@ abstract class CustomFormatException extends FormatException {
     String message = '',
     dynamic source,
     int? offset,
-    this.originalExeption,
+    this.originalException,
   }) : super(message, source, offset);
 
-  final dynamic originalExeption;
+  final dynamic originalException;
 }
 
 abstract class CustomException implements Exception {
   const CustomException({
     this.message = '',
     this.source,
-    this.originalExeption,
+    this.originalException,
   });
 
   final String message;
   final dynamic source;
-  final dynamic originalExeption;
+  final dynamic originalException;
 
   @override
   String toString() => message;
@@ -29,7 +29,7 @@ class ByteStreamSplitException extends CustomFormatException {
     super.message,
     super.source,
     super.offset,
-    super.originalExeption,
+    super.originalException,
   });
 }
 
@@ -38,14 +38,14 @@ class SseParseException extends CustomFormatException {
     super.message,
     super.source,
     super.offset,
-    super.originalExeption,
+    super.originalException,
   });
 }
 
-class SseConnectionExeption extends CustomException {
-  const SseConnectionExeption({
+class SseConnectionException extends CustomException {
+  const SseConnectionException({
     super.message,
     super.source,
-    super.originalExeption,
+    super.originalException,
   });
 }
