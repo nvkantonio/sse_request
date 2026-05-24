@@ -58,8 +58,9 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
     this.onNewConnection,
     this.onConnected,
     this.onCloseConnection,
-    this.onCancel,
-  }) : super(isBroadCast ? StreamController.broadcast() : StreamController()) {
+    Function(String, bool)? onCancel,
+  })  : onCancelConnection = onCancel,
+        super(isBroadCast ? StreamController.broadcast() : StreamController()) {
     eventStreamController
       ..onListen = () async {
         if (!isConnected) {
@@ -73,7 +74,7 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
           } else {
             await clear();
           }
-          onCancel?.call(name, wasConnected);
+          onCancelConnection?.call(name, wasConnected);
         }
       };
   }
@@ -94,7 +95,7 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
   Function(String name, bool wasConnected)? onCloseConnection;
 
   /// Callback for when the controller is cancelled.
-  Function(String name, bool wasConnected)? onCancel;
+  Function(String name, bool wasConnected)? onCancelConnection;
 
   Client? _client;
 
@@ -171,7 +172,7 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
 
     // Ensure onCancel wont rerun dispose or clear
     eventStreamController.onCancel = () {
-      onCancel?.call(name, wasConnected);
+      onCancelConnection?.call(name, wasConnected);
     };
 
     await super.dispose();
