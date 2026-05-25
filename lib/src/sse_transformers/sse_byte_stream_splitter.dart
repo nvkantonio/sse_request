@@ -1,5 +1,3 @@
-import 'dart:developer' as dev;
-
 import '../stream_event_transformer/event_sink_transformer.dart';
 import '../exceptions.dart';
 
@@ -41,8 +39,6 @@ final class SseByteStreamSplitterSink
         originalException: e,
       );
       addError(exception);
-      dev.log(exception.toString());
-      dev.inspect(event);
     }
   }
 }

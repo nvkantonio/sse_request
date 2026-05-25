@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer' as dev;
 
 import '../stream_event_transformer/event_sink_transformer.dart';
 import '../exceptions.dart';
@@ -19,10 +18,8 @@ final class SseStreamParserSink
       addToSink(parseSse(event));
     } on SseParseException catch (e) {
       addError(e);
-      dev.log(e.toString());
     } catch (e) {
       addError(e);
-      dev.log(e.toString());
       rethrow;
     }
   }
