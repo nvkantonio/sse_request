@@ -73,7 +73,11 @@ final class SseStreamParserSink
 
       dynamic decodedValue;
       if (value.startsWith('{') && value.endsWith('}')) {
-        decodedValue = jsonDecode(value);
+        try {
+          decodedValue = jsonDecode(value);
+        } catch (e) {
+          decodedValue = null;
+        }
       }
 
       return MapEntry<String, dynamic>(key, decodedValue ?? value);

@@ -1,3 +1,7 @@
+## 0.3.2
+
+- Fix: return String if can not parse json
+
 ## 0.3.1
 
 - Fix:
