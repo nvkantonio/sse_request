@@ -4,16 +4,6 @@ import 'package:sse_request/sse_request.dart';
 
 /// Creates an SSE GET request with the specified URI, headers  and encoding.
 ///
-/// - [method] is the request method of [SseRequestType].
-///
-/// - [uri] is the URL of the SSE endpoint.
-///
-/// - [headers] is a map of request headers.
-///
-/// - [body] is an optional request body for POST requests.
-///
-/// - [encoding] is the preferred encoding to decode the SSE stream.
-///
 /// {@template sse_request_requests}
 /// Adds next default headers:
 /// ```json
@@ -73,7 +63,7 @@ Stream<Map<String, dynamic>> sseRequestGetStream({
   ).getStream(subName);
 }
 
-/// Sends the GET request with the specified URI, headers, body,
+/// Sends the POST request with the specified URI, headers, body,
 /// and encoding.
 ///
 /// {@macro sse_request_requests}

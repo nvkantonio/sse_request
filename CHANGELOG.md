@@ -1,3 +1,9 @@
+## 0.3.1
+
+- Fix:
+  - Remove unnecessary developer logs
+  - Errors stacktrace handling
+
 ## 0.3.0
 
 - Update: StreamSourceController implements StreamController.
