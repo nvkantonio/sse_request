@@ -23,7 +23,8 @@ typedef ParsedEventErrorAction = FutureOr<void> Function(
 /// If you need more precise control prefer implementing
 /// [SseSourceControllerBase]
 ///
-final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
+final class SseParsedSourceController<T>
+    extends SseSourceControllerBase<T, Map<String, dynamic>> {
   ///
   /// Implementation of [SseSourceControllerBase] where the `onErrorEvent`
   /// and `eventParser` action can be specified in parameter,

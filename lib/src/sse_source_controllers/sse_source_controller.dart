@@ -21,8 +21,8 @@ typedef EventErrorAction = FutureOr<void> Function(
 /// If you need more precise control prefer implementing
 /// [SseSourceControllerBase]
 ///
-final class SseSourceController
-    extends SseSourceControllerBase<Map<String, dynamic>> {
+final class SseSourceController extends SseSourceControllerBase<
+    Map<String, dynamic>, Map<String, dynamic>> {
   ///
   /// Creates an [SseSourceController] with the given parameters.
   ///

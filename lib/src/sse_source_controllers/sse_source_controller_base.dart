@@ -6,14 +6,17 @@ import 'package:meta/meta.dart';
 import '../stream_source_controller.dart';
 import '../../sse_transformers.dart';
 
-typedef ConnectionStreamBuilder = FutureOr<Stream<Map<String, dynamic>>>
-    Function(Client client);
+typedef ConnectionStreamBuilder<S> = FutureOr<Stream<S>> Function(
+    Client client);
 
 /// Base class for SSE source controllers. Manages connection lifecycle
 /// and event handling. Sets up the event stream controller with
 /// custom `onListen` and `onCancel`.
 ///
-abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
+/// - [T] for a SourceController value type
+///
+/// - [S] for an event type
+abstract class SseSourceControllerBase<T, S> extends StreamSourceController<T> {
   ///
   /// Manages connection lifecycle and event handling. Sets up the event stream
   /// controller with custom `onListen` and `onCancel`.
@@ -52,7 +55,7 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
   ///
   SseSourceControllerBase({
     required this.name,
-    required ConnectionStreamBuilder sseStreamBuilder,
+    required ConnectionStreamBuilder<S> sseStreamBuilder,
     bool isBroadCast = false,
     this.doDisposeOnCancel = true,
     this.onNewConnection,
@@ -110,7 +113,7 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
 
   /// Connects the HTTP event listener using the provided stream builder.
   Future<void> connectEventListener(
-      ConnectionStreamBuilder sseStreamBuilder) async {
+      ConnectionStreamBuilder<S> sseStreamBuilder) async {
     assert(!isClosed,
         'Cannot connect event listener when controller already disposed');
 
@@ -180,7 +183,7 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
 
   /// Handles incoming data events.
   @protected
-  FutureOr<void> onDataEvent(Map<String, dynamic> event);
+  FutureOr<void> onDataEvent(S event);
 
   /// Handles incoming error events.
   @protected
