@@ -7,7 +7,7 @@ typedef SseByteStreamSplitter
 typedef SseStreamSplitter = SimpleStreamEventSinkTransformer<String, String>;
 
 typedef SseStreamParser
-    = SimpleStreamEventSinkTransformer<String, Map<String, dynamic>>;
+    = SimpleStreamEventSinkTransformer<String, Map<String, String>>;
 
 /// SseByteStreamSplitterSink splitter creating shorthand
 SseByteStreamSplitter get sseByteStreamSplitter =>

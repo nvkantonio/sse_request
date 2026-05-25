@@ -4,7 +4,7 @@ Simple SSE (Server-Sent Events) consumer.
 
 ## Features
 
-- Consumes SSE and converts each event into a `Map<String, dynamic>`.
+- Consumes SSE and separates each event into a `Map<String, String>`.
 - Configurable and extensible.
 - Can be configured to auto-reconnect or perform any action you want on caught exceptions.
 - Can be configured to parse each event with ease.
@@ -203,7 +203,7 @@ SseParsedSourceController<String>(
   // Invoked on every new event. Expects to return a value of specified type
   // or throw an error, which will call [onErrorEvent], so you don't need to
   // duplicate error handling logic.
-  eventParser: (Map<String, dynamic> event) {
+  eventParser: (Map<String, String> event) {
     // Implement your parser here.
     try {
       return event['response'];

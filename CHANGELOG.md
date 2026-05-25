@@ -1,3 +1,7 @@
+## 1.0.0
+
+- Breaking change: remove json conversion for transformers
+
 ## 0.3.2
 
 - Fix: return String if can not parse json

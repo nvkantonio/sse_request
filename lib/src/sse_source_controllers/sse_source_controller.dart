@@ -21,8 +21,8 @@ typedef EventErrorAction = FutureOr<void> Function(
 /// If you need more precise control prefer implementing
 /// [SseSourceControllerBase]
 ///
-final class SseSourceController extends SseSourceControllerBase<
-    Map<String, dynamic>, Map<String, dynamic>> {
+final class SseSourceController
+    extends SseSourceControllerBase<Map<String, String>, Map<String, String>> {
   ///
   /// Creates an [SseSourceController] with the given parameters.
   ///
@@ -134,7 +134,7 @@ final class SseSourceController extends SseSourceControllerBase<
 
   @override
   @protected
-  void onDataEvent(Map<String, dynamic> event) =>
+  void onDataEvent(Map<String, String> event) =>
       eventStreamController.add(event);
 
   @override

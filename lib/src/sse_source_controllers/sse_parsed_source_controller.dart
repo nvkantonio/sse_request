@@ -9,7 +9,7 @@ typedef ParsedEventErrorAction = FutureOr<void> Function(
   SseParsedSourceController controller,
   Object error,
   StackTrace stackTrace, [
-  Map<String, dynamic>? sourceEvent,
+  Map<String, String>? sourceEvent,
 ]);
 
 /// Implementation of [SseSourceControllerBase] where the `onErrorEvent`
@@ -24,7 +24,7 @@ typedef ParsedEventErrorAction = FutureOr<void> Function(
 /// [SseSourceControllerBase]
 ///
 final class SseParsedSourceController<T>
-    extends SseSourceControllerBase<T, Map<String, dynamic>> {
+    extends SseSourceControllerBase<T, Map<String, String>> {
   ///
   /// Implementation of [SseSourceControllerBase] where the `onErrorEvent`
   /// and `eventParser` action can be specified in parameter,
@@ -61,7 +61,7 @@ final class SseParsedSourceController<T>
   ///   // Expects to return a value of specified type
   ///   // or throw an error, which will call [onErrorEvent],
   ///   // so you don't need to duplicate error handling logic.
-  ///   eventParser: (Map<String, dynamic> event) {
+  ///   eventParser: (Map<String, String> event) {
   ///     // Implement your parser here.
   ///     try {
   ///       return event['response'];
@@ -110,7 +110,7 @@ final class SseParsedSourceController<T>
         SseParsedSourceController controller,
         Object error,
         StackTrace stackTrace, [
-        Map<String, dynamic>? sourceEvent,
+        Map<String, String>? sourceEvent,
       ]) async {
         if (error is ClientException) {
           doDisposeOnClientException
@@ -121,13 +121,13 @@ final class SseParsedSourceController<T>
     }
   }
 
-  FutureOr<T> Function(Map<String, dynamic> event) eventParser;
+  FutureOr<T> Function(Map<String, String> event) eventParser;
 
   late final ParsedEventErrorAction _actionOnErrorEvent;
 
   @override
   @protected
-  FutureOr<void> onDataEvent(Map<String, dynamic> event) async {
+  FutureOr<void> onDataEvent(Map<String, String> event) async {
     try {
       final parsedEvent = await eventParser(event);
       eventStreamController.add(parsedEvent);
@@ -141,7 +141,7 @@ final class SseParsedSourceController<T>
   FutureOr<void> onErrorEvent(
     Object error,
     StackTrace stacktrace, [
-    Map<String, dynamic>? sourceEvent,
+    Map<String, String>? sourceEvent,
   ]) async {
     eventStreamController.addError(error, stacktrace);
     await _actionOnErrorEvent(this, error, stacktrace, sourceEvent);

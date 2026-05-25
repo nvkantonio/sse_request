@@ -14,7 +14,7 @@ extension RequestHandlers on BaseRequest {
   /// distinguish connection events for multiple streams.
   /// [useBroadCast] determines if the stream is broadcast.
   ///
-  Stream<Map<String, dynamic>> getRequestStream({
+  Stream<Map<String, String>> getRequestStream({
     required String subName,
     bool useBroadCast = false,
   }) {
@@ -38,7 +38,7 @@ extension RequestHandlers on BaseRequest {
   }
 
   /// Sends the request and transforms [ByteStream] to
-  /// [Map<String, dynamic>] for every event.
+  /// [Map<String, String>] for every event.
   ///
   /// To connect to a data stream, package use `BaseRequest`'s `send()`,
   /// which returns a `StreamedResponse`.
@@ -46,7 +46,7 @@ extension RequestHandlers on BaseRequest {
   /// `streamedResponse.stream` to receive data as it arrives.
   /// This stream provides raw bytes (`ByteData`), which should be decoded
   /// and parsed into usable events.
-  Future<Stream<Map<String, dynamic>>> sendStreamedRequest({
+  Future<Stream<Map<String, String>>> sendStreamedRequest({
     Client? client,
     Encoding? encoding,
   }) async {

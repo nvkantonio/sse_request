@@ -136,7 +136,7 @@ final class SseRequest extends Request {
   /// distinguish connection events for multiple streams.
   /// [useBroadCast] determines if the stream is broadcast.
   ///
-  Stream<Map<String, dynamic>> getStream(
+  Stream<Map<String, String>> getStream(
     String subName, [
     bool useBroadCast = false,
   ]) =>
@@ -146,7 +146,7 @@ final class SseRequest extends Request {
       );
 
   /// Sends the request and transforms [ByteStream] to
-  /// [Map<String, dynamic>] for every event.
-  Future<Stream<Map<String, dynamic>>> sendStreamed(Client? client) async =>
+  /// [Map<String, String>] for every event.
+  Future<Stream<Map<String, String>>> sendStreamed(Client? client) async =>
       sendStreamedRequest(client: client);
 }

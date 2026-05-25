@@ -50,7 +50,7 @@ import 'package:sse_request/sse_request.dart';
 /// ```
 /// {@endtemplate}
 ///
-Stream<Map<String, dynamic>> sseRequestGetStream({
+Stream<Map<String, String>> sseRequestGetStream({
   required Uri uri,
   required String subName,
   Map<String, String>? headers,
@@ -68,7 +68,7 @@ Stream<Map<String, dynamic>> sseRequestGetStream({
 ///
 /// {@macro sse_request_requests}
 ///
-Stream<Map<String, dynamic>> sseRequestPostStream({
+Stream<Map<String, String>> sseRequestPostStream({
   required Uri uri,
   required String subName,
   Map<String, String>? headers,
@@ -84,8 +84,8 @@ Stream<Map<String, dynamic>> sseRequestPostStream({
 }
 
 /// Sends the GET request with the specified URI, headers, and encoding.
-/// Transforms [ByteStream] to [Map<String, dynamic>] for every event.
-Future<Stream<Map<String, dynamic>>> sseRequestGetSendStreamed({
+/// Transforms [ByteStream] to [Map<String, String>] for every event.
+Future<Stream<Map<String, String>>> sseRequestGetSendStreamed({
   required Uri uri,
   Client? client,
   Map<String, String>? headers,
@@ -100,8 +100,8 @@ Future<Stream<Map<String, dynamic>>> sseRequestGetSendStreamed({
 
 /// Sends the GET request with the specified URI, headers, body,
 /// and encoding. Transforms [ByteStream] to
-/// [Map<String, dynamic>] for every event.
-Future<Stream<Map<String, dynamic>>> sseRequestPostSendStreamed({
+/// [Map<String, String>] for every event.
+Future<Stream<Map<String, String>>> sseRequestPostSendStreamed({
   required Uri uri,
   Client? client,
   Map<String, String>? headers,
