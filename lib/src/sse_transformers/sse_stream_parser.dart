@@ -15,11 +15,12 @@ final class SseStreamParserSink
   @override
   void add(String event) {
     try {
-      addToSink(parseSse(event));
-    } on SseParseException catch (e) {
-      addError(e);
-    } catch (e) {
-      addError(e);
+      final parsedEvent = parseSse(event);
+      addToSink(parsedEvent);
+    } on SseParseException catch (e, stacktrace) {
+      addError(e, stacktrace);
+    } catch (e, stacktrace) {
+      addError(e, stacktrace);
       rethrow;
     }
   }

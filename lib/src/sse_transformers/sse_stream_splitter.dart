@@ -31,13 +31,13 @@ final class SseStreamSplitterSink extends EventSinkTransformer<String, String> {
       for (final splittedEvent in filterBetweenSeparator(event)) {
         addToSink(splittedEvent);
       }
-    } catch (e) {
+    } catch (e, stacktrace) {
       final exception = ByteStreamSplitException(
         message: "Failed to split SSE",
         source: (event),
         originalException: e,
       );
-      addError(exception);
+      addError(exception, stacktrace);
     }
   }
 }

@@ -128,9 +128,10 @@ final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
   @protected
   FutureOr<void> onDataEvent(Map<String, dynamic> event) async {
     try {
-      eventStreamController.add(await eventParser(event));
-    } catch (e, st) {
-      onErrorEvent(e, st, event);
+      final parsedEvent = await eventParser(event);
+      eventStreamController.add(parsedEvent);
+    } catch (e, stacktrace) {
+      onErrorEvent(e, stacktrace, event);
     }
   }
 
@@ -138,11 +139,11 @@ final class SseParsedSourceController<T> extends SseSourceControllerBase<T> {
   @protected
   FutureOr<void> onErrorEvent(
     Object error,
-    StackTrace st, [
+    StackTrace stacktrace, [
     Map<String, dynamic>? sourceEvent,
   ]) async {
-    eventStreamController.addError(error, st);
-    await _actionOnErrorEvent(this, error, st, sourceEvent);
+    eventStreamController.addError(error, stacktrace);
+    await _actionOnErrorEvent(this, error, stacktrace, sourceEvent);
   }
 
   @override

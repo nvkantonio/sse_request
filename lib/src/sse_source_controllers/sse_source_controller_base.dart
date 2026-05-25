@@ -133,13 +133,13 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
       _wasConnected = true;
 
       onConnected?.call(name);
-    } catch (e, st) {
+    } catch (e, stacktrace) {
       eventStreamController.addError(
         SseConnectionException(
           message: 'Could not connect to SSE: $e',
           originalException: e,
         ),
-        st,
+        stacktrace,
       );
       await clear();
       rethrow;
@@ -184,7 +184,7 @@ abstract class SseSourceControllerBase<T> extends StreamSourceController<T> {
 
   /// Handles incoming error events.
   @protected
-  FutureOr<void> onErrorEvent(Object error, StackTrace st);
+  FutureOr<void> onErrorEvent(Object error, StackTrace stacktrace);
 
   /// Handles stream completion event.
   @protected
